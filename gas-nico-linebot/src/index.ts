@@ -15,12 +15,17 @@ const TWITTER_BEARER_TOKEN: string = properties.getProperty(
 )
 
 const SHEET_NAMES: any = {
-  WISHLIST: 'wishlist',
-  BOT_PHOTO: 'photo',
   ANNIVERSARY: 'anniversary',
+  BOT_PHOTO: 'photo',
+  DONE_DIET_TASK: 'doneDietTask',
+  ENCOURAGE_DIET_TASK: 'encourageDietTask',
+  EVENING_CALL: 'eveningCall',
+  MORNING_CALL: 'morningCall',
+  PROVERB: 'proverb',
+  RESPONSE: 'response',
+  WISHLIST: 'wishlist',
   WITHINGS: 'withings',
-  WITHINGS_CHART: 'withingsChart',
-  PROVERB: 'proverb'
+  WITHINGS_CHART: 'withingsChart'
 }
 
 const WEATHER_FORECAST_DAY_ID: any = {
@@ -34,54 +39,6 @@ const WITHINGS_COLUMNS: any = {
   WEIGHT: 2,
   FAT_PERCENT: 3,
   DATE: 4
-}
-
-const MESSAGES: any = {
-  response: [
-    `よんだか${BOT_PHRASE}？`,
-    `なんだ${BOT_PHRASE}？`,
-    `眠い${BOT_PHRASE}`,
-    `お腹空いた${BOT_PHRASE}`,
-    `なでて${BOT_PHRASE}`,
-    `zzz`,
-    `なんか用か${BOT_PHRASE}`,
-    `${BOT_NAME} ヘルプで使い方を教える${BOT_PHRASE}`
-  ],
-  morningCall: [
-    `おはよう${BOT_PHRASE}！`,
-    `Good morning ${BOT_PHRASE}！`,
-    `もう朝だ${BOT_PHRASE}！起きる${BOT_PHRASE}`,
-    `今日も1日がんばる${BOT_PHRASE}！`,
-    `朝だ${BOT_PHRASE}！はよ起きる${BOT_PHRASE}`
-  ],
-  eveningCall: [`今日も１日おつかれさま${BOT_PHRASE}！`],
-  encourageDietTask: [
-    `今日はまだ体重計にのってない${BOT_PHRASE}！`,
-    `体重計、忘れてないか${BOT_PHRASE}？`,
-    `体重計、まだ乗ってない気がする${BOT_PHRASE}...`,
-    `体重計たぶんまだ乗ってない${BOT_PHRASE}...`,
-    `体重計、乗ろう${BOT_PHRASE}？`
-  ],
-  doneDietTask: [
-    `Good${BOT_PHRASE}！続けることが大事${BOT_PHRASE}！`,
-    `体重計も喜んでる${BOT_PHRASE}！`,
-    `体重計に乗り続ける意志力${BOT_PHRASE}！`,
-    `がんばる${BOT_PHRASE}！その調子で続ける${BOT_PHRASE}！`,
-    `目標達成できそうか${BOT_PHRASE}？`
-  ],
-  help: [
-    `${BOT_NAME}はいろいろなことができる${BOT_PHRASE}\n`,
-    `${BOT_NAME}〇〇って何？ で知識検索する${BOT_PHRASE}`,
-    `${BOT_NAME}ほしいもの でほしいものリストを出す${BOT_PHRASE}`,
-    `${BOT_NAME}翻訳〇〇 で日英翻訳する${BOT_PHRASE}`,
-    `${BOT_NAME}天気 で今日の天気を予想する${BOT_PHRASE}`,
-    `${BOT_NAME}〇〇 で${BOT_NAME}と会話する${BOT_PHRASE}`,
-    `${BOT_NAME}画像 で${BOT_NAME}の画像を出す${BOT_PHRASE}`,
-    `${BOT_NAME}体重 で最新の体重を教える${BOT_PHRASE}`,
-    `${BOT_NAME}株価 で最新の株価を教える${BOT_PHRASE}`,
-    `${BOT_NAME}為替 で最新の為替レートを教える${BOT_PHRASE}`,
-    `${BOT_NAME}トレンド で最新のトレンドを教える${BOT_PHRASE}`
-  ]
 }
 
 const isWeekend = (): boolean => {
@@ -299,21 +256,18 @@ const formatWeatherForecastMessage = ({
   ].join('\n')
 }
 
-const weatherForecast = (dayId: number): void => {
+const weatherForecast = (dayId: number): string => {
   const weatherTokyo = getWeatherForecast(130010)
   const weatherKochi = getWeatherForecast(390010)
   if (!weatherTokyo || !weatherKochi) {
     return
   }
   const targetDays: string[] = ['今日', '明日', '明後日']
-  postToLine(
-    [
-      `${targetDays[dayId]}の天気${BOT_PHRASE}!`,
-      formatWeatherForecastMessage({ dayId, forecastData: weatherTokyo }),
-      formatWeatherForecastMessage({ dayId, forecastData: weatherKochi })
-    ].join('\n')
-  )
-  return
+  return [
+    `${targetDays[dayId]}の天気${BOT_PHRASE}!`,
+    formatWeatherForecastMessage({ dayId, forecastData: weatherTokyo }),
+    formatWeatherForecastMessage({ dayId, forecastData: weatherKochi })
+  ].join('\n')
 }
 
 const getStockInfo = (companyCode: number): any => {
@@ -420,7 +374,9 @@ const handleWebhookFromWithings = (json: any): void => {
     imageUrl,
     previewImageUrl: imageUrl
   })
-  postToLine(randomFromArray(MESSAGES.doneDietTask))
+
+  const doneDietTask: any[] = getSpreadSheetValues(SHEET_NAMES.DONE_DIET_TASK)
+  postToLine(randomFromArray(doneDietTask)[0])
   return
 }
 
@@ -445,7 +401,7 @@ const amazonWishList = (): void => {
   return
 }
 
-const whatTheDay = (): void => {
+const whatTheDay = (): string => {
   const lows: any[] = getSpreadSheetValues(SHEET_NAMES.ANNIVERSARY)
   const d: Date = new Date()
   const today: string = `${d.getMonth() + 1}/${d.getDate()}`
@@ -469,8 +425,7 @@ const whatTheDay = (): void => {
       return
     }
   }
-  postToLine(`今日は${today}、今年もあと${daysLeft()}日${BOT_PHRASE}`)
-  return
+  return `今日は${today}、今年もあと${daysLeft()}日${BOT_PHRASE}`
 }
 
 const handleWebhookFromLine = (json: any): void => {
@@ -485,7 +440,8 @@ const handleWebhookFromLine = (json: any): void => {
   const message: string = json.events[0].message.text.trim()
 
   if (new RegExp(`^${BOT_NAME_REGEXP_STRING}$`).test(message)) {
-    postToLine(randomFromArray(MESSAGES.response))
+    const response: any[] = getSpreadSheetValues(SHEET_NAMES.RESPONSE)
+    postToLine(randomFromArray(response)[0])
     return
   }
 
@@ -558,7 +514,7 @@ const handleWebhookFromLine = (json: any): void => {
     } else if (message.indexOf('明後日') !== -1) {
       dayId = WEATHER_FORECAST_DAY_ID.DAY_AFTER_TOMORROW
     }
-    weatherForecast(dayId)
+    postToLine(weatherForecast(dayId))
     return
   }
 
@@ -578,7 +534,21 @@ const handleWebhookFromLine = (json: any): void => {
       message
     )
   ) {
-    postToLine(MESSAGES.help.join('\n'))
+    postToLine(
+      [
+        `${BOT_NAME}はいろいろなことができる${BOT_PHRASE}\n`,
+        `${BOT_NAME}〇〇って何？ で知識検索する${BOT_PHRASE}`,
+        `${BOT_NAME}ほしいもの でほしいものリストを出す${BOT_PHRASE}`,
+        `${BOT_NAME}翻訳〇〇 で日英翻訳する${BOT_PHRASE}`,
+        `${BOT_NAME}天気 で今日の天気を予想する${BOT_PHRASE}`,
+        `${BOT_NAME}〇〇 で${BOT_NAME}と会話する${BOT_PHRASE}`,
+        `${BOT_NAME}画像 で${BOT_NAME}の画像を出す${BOT_PHRASE}`,
+        `${BOT_NAME}体重 で最新の体重を教える${BOT_PHRASE}`,
+        `${BOT_NAME}株価 で最新の株価を教える${BOT_PHRASE}`,
+        `${BOT_NAME}為替 で最新の為替レートを教える${BOT_PHRASE}`,
+        `${BOT_NAME}トレンド で最新のトレンドを教える${BOT_PHRASE}`
+      ].join('\n')
+    )
     return
   }
 
@@ -627,7 +597,6 @@ const handleWebhookFromLine = (json: any): void => {
 
 const doPost = (e): void => {
   const json: any = JSON.parse(e.postData.getDataAsString())
-
   if (json.title === 'withings') {
     handleWebhookFromWithings(json)
     return
@@ -637,8 +606,9 @@ const doPost = (e): void => {
 }
 
 function morningCall(): void {
-  postToLine(randomFromArray(MESSAGES.morningCall))
-  whatTheDay()
+  const messages: any[] = getSpreadSheetValues(SHEET_NAMES.MORNING_CALL)
+  postToLine(randomFromArray(messages)[0])
+  postToLine(whatTheDay())
 }
 
 function encourageDietTask(): void {
@@ -649,14 +619,15 @@ function encourageDietTask(): void {
   if (lastData.date === today) {
     return
   }
-  postToLine(randomFromArray(MESSAGES.encourageDietTask))
+  const messages: any[] = getSpreadSheetValues(SHEET_NAMES.ENCOURAGE_DIET_TASK)
+  postToLine(randomFromArray(messages)[0])
   postToLine(`最後に計測したのは ${lastData.date} だ${BOT_PHRASE}`)
 }
 
 function eveningCall(): void {
-  postToLine(randomFromArray(MESSAGES.eveningCall))
-  weatherForecast(WEATHER_FORECAST_DAY_ID.TOMORROW)
-
+  const messages: any[] = getSpreadSheetValues(SHEET_NAMES.EVENING_CALL)
+  postToLine(randomFromArray(messages)[0])
+  postToLine(weatherForecast(WEATHER_FORECAST_DAY_ID.TOMORROW))
   if (isWeekend()) {
     return
   }
@@ -681,27 +652,3 @@ function trendReport(): void {
 function test(): void {
   Logger.log('execute test')
 }
-
-/*
-function getProverb(): void {
-  const url: string = 'http://www.meigensyu.com/quotations/index/'
-  const firstPage: number = 1
-  const lastPage = 98
-
-  const ary = []
-  for (const i = firstPage; i <= lastPage; i++) {
-    const contentText: string = UrlFetchApp.fetch(`${url}page${i}.html`).getContentText()
-    const matched: string[] = contentText.match( new RegExp(`(<div class="text">)(.+)(</div>)`, 'g'))
-    for (const str of matched) {
-      const m = str.match(new RegExp('^<div class="text">([^<]+)'))
-      ary.push(m[1])
-    }
-  }
-  Logger.log(ary.length)
-  const spreadSheet: any = SpreadsheetApp.openById(SPREAD_SHEET_ID)
-  const sheet = spreadSheet.getSheetByName(SHEET_NAMES.PROVERB)
-  for (const i = 0; i < ary.length; i++) {
-    sheet.getRange(i+1, 1).setValue(ary[i])
-  }
-}
-*/
