@@ -236,7 +236,8 @@ const getChitoseMessage = (): string => {
     'ひなのちゃん',
     'さやちゃん',
     'みこちゃん',
-    'えみりちゃん'
+    'えみりちゃん',
+    'しおりちゃん'
   ]
   const minDay = 0
   const maxDay = 2
