@@ -1,5 +1,4 @@
 const properties = PropertiesService.getScriptProperties()
-// slack
 const LINE_TOKEN: string = properties.getProperty('LINE_TOKEN')
 const LINE_GROUP_ID: string = properties.getProperty('LINE_GROUP_ID')
 const BOT_PHRASE: string = properties.getProperty('BOT_PHRASE')
@@ -435,6 +434,9 @@ const handleWebhookFromLine = (json: any): void => {
   if (json.events[0].source.groupId !== LINE_GROUP_ID) {
     return
   }
+  if (!json.events[0].message.text) {
+    return
+  }
 
   const BOT_NAME_REGEXP_STRING: string = `(${BOT_NAME}ちゃん|${BOT_NAME}ー|${BOT_NAME}〜|${BOT_NAME})`
   const message: string = json.events[0].message.text.trim()
@@ -445,10 +447,14 @@ const handleWebhookFromLine = (json: any): void => {
     return
   }
 
-  if (new RegExp(`^${BOT_NAME_REGEXP_STRING}(.*)って(なに|何)`).test(message)) {
+  if (
+    new RegExp(`^${BOT_NAME_REGEXP_STRING}(.*?)(って|とは)(なに|何)`).test(
+      message
+    )
+  ) {
     const replacedMessage: string = message.replace(/,|、/g, '')
     const q: string = replacedMessage.match(
-      new RegExp(`${BOT_NAME_REGEXP_STRING}(.*)って(なに|何)`)
+      new RegExp(`^${BOT_NAME_REGEXP_STRING}(.*?)(って|とは)(なに|何)`)
     )[2]
     const urlAndBody: any = getWikipediaUrlAndBody(q.trim())
     if (!urlAndBody) {
@@ -631,6 +637,7 @@ function eveningCall(): void {
   if (isWeekend()) {
     return
   }
+  /*
   postToLine(
     [
       `今日の株価と為替レートだ${BOT_PHRASE}`,
@@ -638,6 +645,7 @@ function eveningCall(): void {
       getMoneyRateMessage(getMoneyRateByPairCode('USDJPY'))
     ].join('\n')
   )
+  */
 }
 
 function trendReport(): void {
