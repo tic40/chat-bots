@@ -626,18 +626,22 @@ function encourageDietTask(): void {
     return
   }
   const messages: any[] = getSpreadSheetValues(SHEET_NAMES.ENCOURAGE_DIET_TASK)
-  postToLine(randomFromArray(messages)[0])
-  postToLine(`最後に計測したのは ${lastData.date} だ${BOT_PHRASE}`)
+  postToLine(
+    [
+      randomFromArray(messages)[0],
+      `最後に計測したのは ${lastData.date} だ${BOT_PHRASE}`
+    ].join('\n')
+  )
 }
 
 function eveningCall(): void {
   const messages: any[] = getSpreadSheetValues(SHEET_NAMES.EVENING_CALL)
   postToLine(randomFromArray(messages)[0])
   postToLine(weatherForecast(WEATHER_FORECAST_DAY_ID.TOMORROW))
+  /*
   if (isWeekend()) {
     return
   }
-  /*
   postToLine(
     [
       `今日の株価と為替レートだ${BOT_PHRASE}`,
