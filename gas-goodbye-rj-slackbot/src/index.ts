@@ -233,14 +233,15 @@ const getTwitterTrendsMessage = (trends: any[], limit = 10): string => {
 const getChitoseMessage = (): string => {
   const baseUrl: string = `http://girlsbar-chitose.com/schedule/`
   const names: string[] = [
-    'ひなのちゃん',
-    'さやちゃん',
-    'みこちゃん',
     'えみりちゃん',
-    'しおりちゃん'
+    'さやちゃん',
+    'しおりちゃん',
+    'ななせちゃん',
+    'ひなのちゃん',
+    'みこちゃん'
   ]
-  const minDay = 0
-  const maxDay = 2
+  const minDay: number = 0
+  const maxDay: number = 2
   const messages: string[] = []
   for (const i = minDay; i <= maxDay; i++) {
     let statuses: any = names.map(name => {
@@ -476,7 +477,7 @@ function openingCall(): void {
   if (new Date().getDate() === RJ_DAY) {
     postToSlack(randPickMessageSheet(SHEET_NAMES.RJ_DAY))
   } else {
-    postToSlack(`今年もあと残り ${daysLeft()}日 ${BOT_PHRASE}！`)
+    postToSlack(`今年も残り \`${daysLeft()}日\` ${BOT_PHRASE}！`)
   }
 }
 
