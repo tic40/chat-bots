@@ -22,6 +22,7 @@ const SHEET_NAMES: any = {
   MORNING_CALL: 'morningCall',
   PROVERB: 'proverb',
   RESPONSE: 'response',
+  TWEET: 'tweet',
   WISHLIST: 'wishlist',
   WITHINGS: 'withings',
   WITHINGS_CHART: 'withingsChart'
@@ -613,8 +614,7 @@ const doPost = (e): void => {
 
 function morningCall(): void {
   const messages: any[] = getSpreadSheetValues(SHEET_NAMES.MORNING_CALL)
-  postToLine(randomFromArray(messages)[0])
-  postToLine(whatTheDay())
+  postToLine([randomFromArray(messages)[0], whatTheDay()].join('\n'))
 }
 
 function encourageDietTask(): void {
@@ -659,6 +659,14 @@ function trendReport(): void {
       `${getTwitterTrendsMessage(getTwitterTrends(23424856))}`
     ].join('\n')
   )
+}
+
+function tweet(): void {
+  const randInt = Math.floor(Math.random() * Math.floor(5))
+  if (randInt === 1) {
+    const messages: any[] = getSpreadSheetValues(SHEET_NAMES.TWEET)
+    postToLine(randomFromArray(messages)[0])
+  }
 }
 
 function test(): void {
