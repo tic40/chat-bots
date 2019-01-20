@@ -25,6 +25,8 @@ const TWITTER_BEARER_TOKEN: string = properties.getProperty(
 const PROGRESS_TARGET_CHANNEL: string = properties.getProperty(
   'PROGRESS_TARGET_CHANNEL'
 )
+const IMGURL_CLIENT_ID: string = properties.getProperty('IMGURL_CLIENT_ID')
+const GET_PAIRS_URL: string = properties.getProperty('GET_PAIRS_URL')
 const COMPANY_CODE_NIKKEI_AVE: number = 998407
 
 const SHEET_NAMES: any = {
@@ -314,6 +316,28 @@ const getChitoseMessage = (): string => {
   return `${messages.join('\n')}`
 }
 
+const getPairsScreenshotUrl = (): string => {
+  const url: string = GET_PAIRS_URL
+  const imageBlob: any = UrlFetchApp.fetch(url).getBlob()
+  const data: string = Utilities.base64Encode(imageBlob.getBytes())
+
+  // upload image to imgurl
+  const res: any = UrlFetchApp.fetch('https://api.imgur.com/3/image', {
+    contentType: 'application/json',
+    method: 'post',
+    headers: {
+      Authorization: `Client-ID ${IMGURL_CLIENT_ID}`
+    },
+    payload: JSON.stringify({
+      image: data
+    })
+  })
+  if (!res) {
+    return
+  }
+  return JSON.parse(res).data.link
+}
+
 const doPost = (e): void => {
   const token: string = e.parameter.token
   const triggerWord: string = e.parameter.trigger_word
@@ -447,6 +471,18 @@ const doPost = (e): void => {
     return
   }
 
+  if (
+    new RegExp('^(ぺあーず|ペアーズ|pairs|例)の(すくしょ|スクショ)', 'i').test(
+      message
+    )
+  ) {
+    postToSlack(`データ取得中...ちょっと時間かかるかも`, channelName)
+    postToSlack('スクショとったよ', channelName, {
+      imageUrl: getPairsScreenshotUrl()
+    })
+    return
+  }
+
   if (new RegExp(RJ.join('|')).test(message)) {
     postToSlack(randPickMessageSheet(SHEET_NAMES.RJ), channelName)
     return
@@ -458,17 +494,27 @@ const doPost = (e): void => {
 
 const postToSlack = (
   text: string,
-  channelName: string = SLACK_CHANNEL
+  channelName: string = SLACK_CHANNEL,
+  { imageUrl } = {}
 ): void => {
+  const payload = {
+    text,
+    channel: channelName,
+    icon_emoji: SLACK_BOT_ICON_EMOJI,
+    username: SLACK_BOT_USERNAME
+  }
+  if (imageUrl) {
+    payload.attachments = [
+      {
+        image_url: imageUrl
+      }
+    ]
+  }
+
   UrlFetchApp.fetch(SLACK_WEBHOOK_URL, {
     contentType: 'application/json',
     method: 'post',
-    payload: JSON.stringify({
-      text,
-      channel: channelName,
-      icon_emoji: SLACK_BOT_ICON_EMOJI,
-      username: SLACK_BOT_USERNAME
-    })
+    payload: JSON.stringify(payload)
   })
 }
 
@@ -525,6 +571,12 @@ function chitose(): void {
     `例の出勤スケジュール${BOT_PHRASE}\n${getChitoseMessage()}`,
     PROGRESS_TARGET_CHANNEL
   )
+}
+
+function pairs(): void {
+  postToSlack('スクショとったよ', PROGRESS_TARGET_CHANNEL, {
+    imageUrl: getPairsScreenshotUrl()
+  })
 }
 
 function test(): void {
