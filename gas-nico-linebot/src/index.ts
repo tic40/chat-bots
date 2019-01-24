@@ -662,7 +662,7 @@ function trendReport(): void {
 }
 
 function tweet(): void {
-  const randInt = Math.floor(Math.random() * Math.floor(5))
+  const randInt = Math.floor(Math.random() * Math.floor(4))
   if (randInt === 1) {
     const messages: any[] = getSpreadSheetValues(SHEET_NAMES.TWEET)
     postToLine(randomFromArray(messages)[0])
