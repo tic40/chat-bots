@@ -338,6 +338,30 @@ const getPairsScreenshotUrl = (): string => {
   return JSON.parse(res).data.link
 }
 
+const getRJKarakuriMessage = (message): string => {
+  const res: any = UrlFetchApp.fetch('https://rarejob.karakuri.ai/api/chats', {
+    contentType: 'application/json',
+    method: 'post',
+    payload: JSON.stringify({
+      query: message,
+      session: Math.random()
+        .toString(36)
+        .substring(12),
+      referrer: ''
+    })
+  })
+  if (!res) {
+    return ''
+  }
+  const parsed = JSON.parse(res)[0]
+  if (parsed.type === 'text') {
+    return parsed.text
+  }
+  return `めんどくさいレスポンス返ってきたからそのまま表示するね\n\n\`\`\`${JSON.stringify(
+    parsed
+  )}\`\`\``
+}
+
 const doPost = (e): void => {
   const token: string = e.parameter.token
   const triggerWord: string = e.parameter.trigger_word
@@ -404,6 +428,7 @@ const doPost = (e): void => {
         `bot 日経平均株価で現在の日経平均株価を教えるよ`,
         `bot 為替で現在の為替レートを教えるよ`,
         `bot トレンドで現在のトレンドを教えるよ`,
+        `bot サポート〇〇でサポートが答えるよ`,
         `botトリガーは 'b' でもいいよ`
       ].join('\n'),
       channelName
@@ -480,6 +505,18 @@ const doPost = (e): void => {
     postToSlack('スクショとったよ', channelName, {
       imageUrl: getPairsScreenshotUrl()
     })
+    return
+  }
+
+  if (new RegExp('^(サポート|さぽーと)', 'i').test(message)) {
+    const matched: string[] = message.match(
+      new RegExp(`(サポート|さぽーと)(.*)`)
+    )
+    if (!matched || !matched[2]) {
+      return
+    }
+    const responseMessage: string = matched[2].trim()
+    postToSlack(getRJKarakuriMessage(responseMessage), channelName)
     return
   }
 
