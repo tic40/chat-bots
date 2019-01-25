@@ -574,7 +574,7 @@ function chitose(): void {
 }
 
 function pairs(): void {
-  postToSlack('スクショとったよ', PROGRESS_TARGET_CHANNEL, {
+  postToSlack('例のスクショぞい', PROGRESS_TARGET_CHANNEL, {
     imageUrl: getPairsScreenshotUrl()
   })
 }
