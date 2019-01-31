@@ -182,7 +182,7 @@ const formatWeatherForecastMessage = ({
   const max: number = Number(temp.max && temp.max.celsius)
   let comment: string = ''
   if (/雨/.test(telop)) {
-    comment = `傘が必要かもしれんね`
+    comment = `傘が必要かも${BOT_PHRASE}`
   }
 
   const unknownText: string = '-'
@@ -190,7 +190,9 @@ const formatWeatherForecastMessage = ({
     `${areaName}: ${telop}`,
     `気温(最低/最高): ${min || unknownText} / ${max || unknownText}`,
     comment
-  ].join('\n')
+  ]
+    .filter(v => v)
+    .join('\n')
 }
 
 const weatherForecast = (dayId: number): string => {
@@ -203,6 +205,7 @@ const weatherForecast = (dayId: number): string => {
   return [
     `${targetDays[dayId]}の天気${BOT_PHRASE}!`,
     formatWeatherForecastMessage({ dayId, forecastData: weatherTokyo }),
+    '',
     formatWeatherForecastMessage({ dayId, forecastData: weatherKochi })
   ].join('\n')
 }
