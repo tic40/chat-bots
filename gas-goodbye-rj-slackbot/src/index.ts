@@ -47,6 +47,7 @@ const doPost = (e): void => {
 
   if (new RegExp('^(今日|きょう)も(一|[０-９ 0-9]*)(日|にち)').test(message)) {
     postToSlack(randPickMessageSheet(SHEET_NAMES.KYOMO_ICHINICHI), channelName)
+    chitose()
     return
   }
 
@@ -126,24 +127,6 @@ const doPost = (e): void => {
     return
   }
 
-  if (new RegExp('^ちとせ|(例|れい)の(アレ|あれ)').test(message)) {
-    postToSlack(`データ取得中...`, channelName)
-    postToSlack(getChitoseMessage(), channelName)
-    return
-  }
-
-  if (
-    new RegExp('^(ぺあーず|ペアーズ|pairs|例)の(すくしょ|スクショ)', 'i').test(
-      message
-    )
-  ) {
-    postToSlack(`データ取得中...ちょっと時間かかるかも`, channelName)
-    postToSlack('スクショとったよ', channelName, {
-      imageUrl: getPairsScreenshotUrl()
-    })
-    return
-  }
-
   if (new RegExp('^(サポート|さぽーと)', 'i').test(message)) {
     const matched: string[] = message.match(
       new RegExp(`(サポート|さぽーと)(.*)`)
@@ -220,11 +203,13 @@ function chitose(): void {
   )
 }
 
+/*
 function pairs(): void {
   postToSlack('例のスクショぞい', PROGRESS_TARGET_CHANNEL, {
     imageUrl: getPairsScreenshotUrl()
   })
 }
+*/
 
 function test(): void {
   Logger.log('execute test')
