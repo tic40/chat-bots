@@ -200,7 +200,7 @@ const getChitoseMessage = (): string => {
     'みこちゃん'
   ]
   const minDay: number = 0
-  const maxDay: number = 2
+  const maxDay: number = 4
   const messages: string[] = []
   for (const i = minDay; i <= maxDay; i++) {
     let statuses: any = names.map(name => {
