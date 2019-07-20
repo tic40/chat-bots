@@ -212,8 +212,8 @@ const handleWebhookFromWithings = (json: any): void => {
     previewImageUrl: imageUrl
   })
 
-  const doneDietTask: any[] = getSpreadSheetValues(SHEET_NAMES.DONE_DIET_TASK)
-  postToLine(randomFromArray(doneDietTask)[0])
+  // const doneDietTask: any[] = getSpreadSheetValues(SHEET_NAMES.DONE_DIET_TASK)
+  // postToLine(randomFromArray(doneDietTask)[0])
   return
 }
 
@@ -251,8 +251,12 @@ function encourageDietTask(): void {
 
 function eveningCall(): void {
   const messages: any[] = getSpreadSheetValues(SHEET_NAMES.EVENING_CALL)
-  postToLine(randomFromArray(messages)[0])
-  postToLine(weatherForecast(WEATHER_FORECAST_DAY_ID.TOMORROW))
+  postToLine(
+    [
+      randomFromArray(messages)[0],
+      weatherForecast(WEATHER_FORECAST_DAY_ID.TOMORROW)
+    ].join('\n')
+  )
 }
 
 function trendReport(): void {
