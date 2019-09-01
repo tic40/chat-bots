@@ -126,9 +126,13 @@ const whatTheDay = (): string => {
 
 const getWikipediaUrlAndBody = (q: string): { url: string; body: string } => {
   const simpleWikipediaApi: string = 'http://wikipedia.simpleapi.net/api'
-  const url: string = `${simpleWikipediaApi}?keyword=${encodeURIComponent( q)}&output=json`
+  const url: string = `${simpleWikipediaApi}?keyword=${encodeURIComponent(
+    q
+  )}&output=json`
   const res: any = JSON.parse(UrlFetchApp.fetch(url))
-  if (!res) { return }
+  if (!res) {
+    return
+  }
   return {
     url: res[0].url,
     body: res[0].body

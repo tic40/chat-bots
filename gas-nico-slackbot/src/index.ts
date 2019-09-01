@@ -1,5 +1,4 @@
 const doPost = (e): void => {
-
   const title = e.parameter.title
   if (title && title === 'withings') {
     handleWebhookFromWithings(e.parameter)
@@ -12,9 +11,12 @@ const doPost = (e): void => {
   const channelName: string = e.parameter.channel_name
   const message: string = e.parameter.text.replace(triggerWord, '').trim()
 
-
-  if (token !== SLACK_OUTGOING_WEBHOOK_TOKEN) { return }
-  if (userName === 'slackbot') { return }
+  if (token !== SLACK_OUTGOING_WEBHOOK_TOKEN) {
+    return
+  }
+  if (userName === 'slackbot') {
+    return
+  }
 
   if (new RegExp('とれんど|トレンド|trend', 'i').test(message)) {
     // japan: 23424856 tokyo: 1118370
@@ -28,7 +30,9 @@ const doPost = (e): void => {
     return
   }
 
-  if (new RegExp('ほしいもの|欲しいもの|欲しい物|wishlist', 'i').test(message)) {
+  if (
+    new RegExp('ほしいもの|欲しいもの|欲しい物|wishlist', 'i').test(message)
+  ) {
     const lows: any[] = getSpreadSheetValues(SHEET_NAMES.WISHLIST)
     const messages = [`みんなのほしいもの${BOT_PHRASE}`]
     const wishlistUrl: string = getSpreadSheetUrl(SHEET_NAMES.WISHLIST)
@@ -58,7 +62,9 @@ const doPost = (e): void => {
   }
 
   if (new RegExp(`(.*)(翻訳して|翻訳)(.+)`).test(message)) {
-    const matched: string[] = message.match( new RegExp(`(.*)(翻訳して|翻訳)(.+)`))
+    const matched: string[] = message.match(
+      new RegExp(`(.*)(翻訳して|翻訳)(.+)`)
+    )
     const text: string = matched[matched.length - 1]
     const translatedText: string = googleTranslate(text.trim()) || ''
     postToSlack(`${translatedText} ${BOT_PHRASE}`, channelName)
@@ -183,4 +189,3 @@ function oneGoodPerDay(): void {
 function test(): void {
   Logger.log('execute test')
 }
-
