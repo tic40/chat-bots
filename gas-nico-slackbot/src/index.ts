@@ -18,6 +18,12 @@ const doPost = (e): void => {
     return
   }
 
+  if (!message) {
+    const response: any[] = getSpreadSheetValues(SHEET_NAMES.RESPONSE)
+    postToSlack(randomFromArray(response)[0], channelName)
+    return
+  }
+
   if (new RegExp('とれんど|トレンド|trend', 'i').test(message)) {
     // japan: 23424856 tokyo: 1118370
     postToSlack(
@@ -27,6 +33,11 @@ const doPost = (e): void => {
       ].join('\n'),
       channelName
     )
+    return
+  }
+
+  if (new RegExp('^アルバム$', 'i').test(message)) {
+    postToSlack(`<https://photos.app.goo.gl/AL683Y1zYB7otzJS6|アルバムはここ>${BOT_PHRASE}！画像をアップしてほしい${BOT_PHRASE}`, channelName)
     return
   }
 
@@ -168,7 +179,7 @@ function eveningCall(): void {
 function trendReport(): void {
   postToSlack(
     [
-      `現在のトレンドだよ。もうチェックした？`,
+      `現在のトレンドだよ。もうチェックした${BOT_PHRASE}？`,
       `${getTwitterTrendsMessage(getTwitterTrends(23424856))}`
     ].join('\n')
   )
