@@ -24,6 +24,13 @@ const doPost = (e): void => {
     return
   }
 
+  if (new RegExp('(.*)(post:)(.+)').test(message)) {
+    const matched: string[] = message.match(new RegExp('(.*)(post:)(.+)'))
+    const text: string = matched[matched.length - 1]
+    postToSlack(text)
+    return
+  }
+
   if (new RegExp('とれんど|トレンド|trend', 'i').test(message)) {
     // japan: 23424856 tokyo: 1118370
     postToSlack(
@@ -37,7 +44,10 @@ const doPost = (e): void => {
   }
 
   if (new RegExp('^アルバム$', 'i').test(message)) {
-    postToSlack(`<https://photos.app.goo.gl/AL683Y1zYB7otzJS6|アルバムはここ>${BOT_PHRASE}！画像をアップしてほしい${BOT_PHRASE}`, channelName)
+    postToSlack(
+      `<https://photos.app.goo.gl/AL683Y1zYB7otzJS6|アルバムはここ>${BOT_PHRASE}！画像をアップしてほしい${BOT_PHRASE}`,
+      channelName
+    )
     return
   }
 
@@ -164,6 +174,12 @@ const handleWebhookFromWithings = (data: any): void => {
 function openingCall(): void {
   const messages: any[] = getSpreadSheetValues(SHEET_NAMES.MORNING_CALL)
   postToSlack([randomFromArray(messages)[0], whatTheDay()].join('\n'))
+}
+
+function dailyTodo(): void {
+  const message: string = `今日やることをここに書き込む${BOT_PHRASE}！`
+  const trello: string = 'https://trello.com/b/Dk9SG77Y/kazukoやることリスト'
+  postToSlack([messages, trello].join('\n'))
 }
 
 function eveningCall(): void {
