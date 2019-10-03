@@ -177,9 +177,9 @@ function openingCall(): void {
 }
 
 function dailyTodo(): void {
-  const message: string = `今日やることをここに書き込む${BOT_PHRASE}！`
+  const message: string = `今日やるべきことをやろう${BOT_PHRASE}！`
   const trello: string = 'https://trello.com/b/Dk9SG77Y/kazukoやることリスト'
-  postToSlack([messages, trello].join('\n'))
+  postToSlack([message, trello].join('\n'))
 }
 
 function eveningCall(): void {
@@ -197,6 +197,23 @@ function trendReport(): void {
     [
       `現在のトレンドだよ。もうチェックした${BOT_PHRASE}？`,
       `${getTwitterTrendsMessage(getTwitterTrends(23424856))}`
+    ].join('\n')
+  )
+}
+
+function encourageDietTask(): void {
+  const now: Date = new Date()
+  const today: string = `${now.getFullYear()}/${now.getMonth() +
+    1}/${now.getDate()}`
+  const lastData: any = getLastWithingsMeasure()
+  if (lastData.date === today) {
+    return
+  }
+  const messages: any[] = getSpreadSheetValues(SHEET_NAMES.ENCOURAGE_DIET_TASK)
+  postToSlack(
+    [
+      randomFromArray(messages)[0],
+      `最後に計測したのは ${lastData.date} だ${BOT_PHRASE}`
     ].join('\n')
   )
 }
