@@ -45,7 +45,7 @@ const doPost = (e): void => {
 
   if (new RegExp('^アルバム$', 'i').test(message)) {
     postToSlack(
-      `<https://photos.app.goo.gl/AL683Y1zYB7otzJS6|アルバムはここ>${BOT_PHRASE}！画像をアップしてほしい${BOT_PHRASE}`,
+      `<https://photos.app.goo.gl/P9KGVwa8StvLB7wb6|アルバムはここ>${BOT_PHRASE}！画像をアップしてほしい${BOT_PHRASE}`,
       channelName
     )
     return
