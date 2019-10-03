@@ -43,7 +43,7 @@ const doPost = (e): void => {
     return
   }
 
-  if (new RegExp('^アルバム$', 'i').test(message)) {
+  if (new RegExp('アルバム', 'i').test(message)) {
     postToSlack(
       `<https://photos.app.goo.gl/P9KGVwa8StvLB7wb6|アルバムはここ>${BOT_PHRASE}！画像をアップしてほしい${BOT_PHRASE}`,
       channelName
@@ -168,6 +168,28 @@ const handleWebhookFromWithings = (data: any): void => {
       `計測日: ${data.date}`
     ].join('\n')
   )
+
+  const date: Date = new Date(
+    data.date.slice(0, data.date.indexOf('at')).trim()
+  )
+  const formattedDate: string = `${date.getFullYear()}/${date.getMonth() +
+    1}/${date.getDate()}`
+  const sheet: any = getSpreadSheet(SHEET_NAMES.WITHINGS)
+  const nextRow: number = sheet.getLastRow() + 1
+  sheet.getRange(nextRow, WITHINGS_COLUMNS.USERNAME).setValue(data.username)
+  sheet.getRange(nextRow, WITHINGS_COLUMNS.WEIGHT).setValue(data.weight)
+  sheet
+    .getRange(nextRow, WITHINGS_COLUMNS.FAT_PERCENT)
+    .setValue(data.fatPercent)
+  sheet.getRange(nextRow, WITHINGS_COLUMNS.DATE).setValue(formattedDate)
+
+  const diff = data.weight - lastWeight
+  if (diff < 0) {
+    postToSlack(`前回より痩せてる気がする${BOT_PHRASE}！`)
+  } else if (diff > 0) {
+    postToSlack(`前回より増えてないか${BOT_PHRASE}？`)
+  }
+
   return
 }
 
