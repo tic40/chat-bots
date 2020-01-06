@@ -38,14 +38,6 @@ const doPost = (e): void => {
   }
 
   /*
-  if (new RegExp('アルバム', 'i').test(message)) {
-    postToSlack(
-      `<https://photos.app.goo.gl/P9KGVwa8StvLB7wb6|アルバムはここ>${BOT_PHRASE}！画像をアップしてほしい${BOT_PHRASE}`,
-      channelName
-    )
-    return
-  }
-
   if (
     new RegExp('ほしいもの|欲しいもの|欲しい物|wishlist', 'i').test(message)
   ) {
@@ -114,6 +106,7 @@ function dailyTodo(): void {
   const trello: string = 'https://trello.com/b/Dk9SG77Y/kazukoやることリスト'
   postToSlack([message, trello].join('\n'))
 }
+*/
 
 function eveningCall(): void {
   const messages: any[] = getSpreadSheetValues(SHEET_NAMES.EVENING_CALL)
@@ -124,7 +117,6 @@ function eveningCall(): void {
     ].join('\n')
   )
 }
-*/
 
 function trendReport(): void {
   postToSlack(
