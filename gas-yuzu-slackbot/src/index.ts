@@ -5,8 +5,12 @@ const doPost = (e): void => {
   const channelName: string = e.parameter.channel_name
   const message: string = e.parameter.text.replace(triggerWord, '').trim()
 
-  if (token !== SLACK_OUTGOING_WEBHOOK_TOKEN) return
-  if (userName === 'slackbot') return
+  if (token !== SLACK_OUTGOING_WEBHOOK_TOKEN) {
+    return
+  }
+  if (userName === 'slackbot') {
+    return
+  }
 
   if (!message) {
     const response: any[] = getSpreadSheetValues(SHEET_NAMES.RESPONSE)

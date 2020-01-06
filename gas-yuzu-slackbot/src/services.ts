@@ -64,11 +64,13 @@ const formatWeatherForecastMessage = ({
 
 const weatherForecast = (dayId: number): string => {
   const weatherTokyo = getWeatherForecast(130010)
-  if (!weatherTokyo) { return }
+  if (!weatherTokyo) {
+    return
+  }
   const targetDays: string[] = ['今日', '明日', '明後日']
   return [
     `${targetDays[dayId]}の天気${BOT_PHRASE}!`,
-    formatWeatherForecastMessage({ dayId, forecastData: weatherTokyo }),
+    formatWeatherForecastMessage({ dayId, forecastData: weatherTokyo })
   ].join('\n')
 }
 
