@@ -114,11 +114,10 @@ const whatTheDay = (): string => {
       }
 
       if (subject === '誕生日') {
-        postToLine(`今日は${target}の誕生日！おめでと${BOT_PHRASE}！`)
+        return (`今日は${target}の誕生日！おめでと${BOT_PHRASE}！`)
       } else {
-        postToLine(`今日は${subject}だ${BOT_PHRASE}！`)
+        return (`今日は${subject}だ${BOT_PHRASE}！`)
       }
-      return
     }
   }
   return `今日は${today}、今年も残り \`${daysLeft()}日\` ${BOT_PHRASE}`
