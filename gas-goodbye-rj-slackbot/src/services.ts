@@ -138,12 +138,12 @@ const getStockInfoDow = (): any => {
   const price = matchedPrice[2]
 
   const matchedComparison: string[] = contentText.match(
-    new RegExp( `(<dd class="deltaUp arrow">)(.+)(</dd>)`)
+    new RegExp( `(<dd class="delta(Up|Down) arrow">)(.+)(</dd>)`)
   )
   if (!matchedComparison) {
     return {}
   }
-  const comparison: string = matchedComparison[2]
+  const comparison: string = matchedComparison[3]
   return { name: 'NYダウ', price, comparison }
 }
 
