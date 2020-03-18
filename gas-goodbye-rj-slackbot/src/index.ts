@@ -99,6 +99,17 @@ const doPost = (e): void => {
     return
   }
 
+  if (new RegExp('^(NY)?ダウ').test(message)) {
+    postToSlack(`株価取得中...`, channelName)
+    const stockInfo: any = getStockInfoDow()
+    if (!stockInfo.name) {
+      postToSlack('株価の取得に失敗しました', channelName)
+    } else {
+      postToSlack(getStockInfoMessage(stockInfo), channelName)
+    }
+    return
+  }
+
   if (new RegExp('^株価').test(message)) {
     postToSlack(`株価取得中...`, channelName)
     let companyCode: number = COMPANY_CODE_RJ

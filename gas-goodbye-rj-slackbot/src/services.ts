@@ -128,6 +128,25 @@ const getMoneyRateMessage = (rate: {
   } ask: ${rate.ask} bid: ${rate.bid}`
 }
 
+const getStockInfoDow = (): any => {
+  const url: string = 'https://m.finance.yahoo.co.jp/stock?code=%5Edji'
+  const contentText: string = UrlFetchApp.fetch(url).getContentText()
+  const matchedPrice: string[] = contentText.match(
+    new RegExp(`(<dd class="priceFin">)(.+)(</dd>)`)
+  )
+  if (!matchedPrice) return {}
+  const price = matchedPrice[2]
+
+  const matchedComparison: string[] = contentText.match(
+    new RegExp( `(<dd class="deltaUp arrow">)(.+)(</dd>)`)
+  )
+  if (!matchedComparison) {
+    return {}
+  }
+  const comparison: string = matchedComparison[2]
+  return { name: 'NYダウ', price, comparison }
+}
+
 const getStockInfo = (companyCode: number): any => {
   const url: string = `https://stocks.finance.yahoo.co.jp/stocks/detail/?code=${companyCode}`
   const contentText: string = UrlFetchApp.fetch(url).getContentText()
@@ -166,7 +185,7 @@ const getStockInfoMessage = (stockInfo: {
   price: string
   comparison: string
 }): string => {
-  return `${stockInfo.name} の現在の株価は ${stockInfo.price}円 前日比${
+  return `${stockInfo.name} の現在の株価は ${stockInfo.price} 前日比${
     stockInfo.comparison
   } です`
 }
