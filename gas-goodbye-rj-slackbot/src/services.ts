@@ -147,6 +147,11 @@ const getStockInfoDow = (): any => {
   return { name: 'NYダウ', price, comparison }
 }
 
+const getBitCoinRate = (): { ask: number, bid: number, mid: number } => {
+  const url = 'https://bitflyer.com/api/echo/price'
+  return JSON.parse(UrlFetchApp.fetch(url).getContentText())
+}
+
 const getStockInfo = (companyCode: number): any => {
   const url: string = `https://stocks.finance.yahoo.co.jp/stocks/detail/?code=${companyCode}`
   const contentText: string = UrlFetchApp.fetch(url).getContentText()
@@ -188,6 +193,14 @@ const getStockInfoMessage = (stockInfo: {
   return `${stockInfo.name} の現在の株価は ${stockInfo.price} 前日比${
     stockInfo.comparison
   } です`
+}
+
+const getBitCoinRateMessage = (rate: {
+  ask: number
+  mid: number
+  bid: number
+}): string => {
+  return `ビットコインの現在の買値は ${Math.floor(rate.mid).toLocaleString()} 円です`
 }
 
 const getTwitterTrends = (locationId: number): any[] => {

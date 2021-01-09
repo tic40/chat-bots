@@ -110,6 +110,17 @@ const doPost = (e): void => {
     return
   }
 
+  if (new RegExp('^ビットコ(イン)?').test(message)) {
+    postToSlack(`レート取得中...`, channelName)
+    const bitCoinRate = getBitCoinRate()
+    if (!bitCoinRate) {
+      postToSlack('レートの取得に失敗しました', channelName)
+    } else {
+      postToSlack(getBitCoinRateMessage(bitCoinRate), channelName))
+    }
+    return
+  }
+
   if (new RegExp('^株価').test(message)) {
     postToSlack(`株価取得中...`, channelName)
     let companyCode: number = COMPANY_CODE_RJ
@@ -186,11 +197,12 @@ function stockReport(): void {
   if (isWeekend()) {
     return
   }
-  postToSlack(`今日の株価と為替レート${BOT_PHRASE}`)
+  postToSlack(`今日のレートチェック${BOT_PHRASE}`)
   postToSlack(
     [
       getStockInfoMessage(getStockInfo(COMPANY_CODE_NIKKEI_AVE)),
-      getStockInfoMessage(getStockInfo(COMPANY_CODE_RJ))
+      getStockInfoMessage(getStockInfo(COMPANY_CODE_RJ)),
+      getBitCoinRateMessage(getBitCoinRate()))
     ].join('\n')
   )
   postToSlack(
