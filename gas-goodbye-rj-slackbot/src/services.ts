@@ -200,7 +200,7 @@ const getBitCoinRateMessage = (rate: {
   mid: number
   bid: number
 }): string => {
-  return `ビットコインの現在の買値は ${Math.floor(rate.mid).toLocaleString()} 円です`
+  return `ビットコインの現在の買値は ${Math.floor(rate.ask).toLocaleString()} 円です`
 }
 
 const getTwitterTrends = (locationId: number): any[] => {
