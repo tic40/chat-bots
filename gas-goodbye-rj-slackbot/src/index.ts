@@ -202,14 +202,14 @@ function stockReport(): void {
     [
       getStockInfoMessage(getStockInfo(COMPANY_CODE_NIKKEI_AVE)),
       getStockInfoMessage(getStockInfo(COMPANY_CODE_RJ)),
-      getBitCoinRateMessage(getBitCoinRate()))
+      getBitCoinRateMessage(getBitCoinRate())
     ].join('\n')
   )
-  postToSlack(
-    [`為替レート`, getMoneyRateMessage(getMoneyRateByPairCode('USDJPY'))].join(
-      '\n'
-    )
-  )
+  // postToSlack(
+  //   [`為替レート`, getMoneyRateMessage(getMoneyRateByPairCode('USDJPY'))].join(
+  //     '\n'
+  //   )
+  // )
 }
 
 function howIsProgress(): void {
