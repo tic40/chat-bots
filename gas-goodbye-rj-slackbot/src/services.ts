@@ -149,7 +149,6 @@ const getBitCoinRate = (): { ask: number; bid: number; mid: number } => {
 }
 
 const getStockInfoNew = (companyCode: string) => {
-  // const url = `https://finance.yahoo.co.jp/quote/${companyCode}`
   const url = `https://kabutan.jp/stock/chart?code=${companyCode}`
   const contentText: string = UrlFetchApp.fetch(url).getContentText()
 
@@ -171,7 +170,7 @@ const getStockInfoNew = (companyCode: string) => {
   }
   const name: string = matchedName[1]
   const price: string = matchedPrice[1]
-  const comparison: string = `${matchedDiffPrice[1]}(${matchedDiffPer[1]})%`
+  const comparison: string = `${matchedDiffPrice[1]}(${matchedDiffPer[1]}%)`
   return { name, price, comparison }
 }
 
