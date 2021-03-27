@@ -129,7 +129,7 @@ const doPost = (e): void => {
       companyCode = Number(matched[2])
     }
 
-    const stockInfo: any = getStockInfo(companyCode)
+    const stockInfo: any = getStockInfoNew(companyCode)
     if (!stockInfo.name) {
       postToSlack('株価の取得に失敗しました', channelName)
     } else {
@@ -201,7 +201,7 @@ function stockReport(): void {
   postToSlack(
     [
       getStockInfoMessage(getStockInfo(COMPANY_CODE_NIKKEI_AVE)),
-      getStockInfoMessage(getStockInfo(COMPANY_CODE_RJ)),
+      getStockInfoMessage(getStockInfoNew(COMPANY_CODE_RJ)),
       getBitCoinRateMessage(getBitCoinRate())
     ].join('\n')
   )

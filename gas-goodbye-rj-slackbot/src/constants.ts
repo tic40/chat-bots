@@ -37,11 +37,11 @@ const SHEET_NAMES: any = {
   OPENING_CALL: 'opening_call',
   WAY: 'way',
   RJ: 'rj',
-  RJ_DAY: 'rj_day'
+  RJ_DAY: 'rj_day',
 }
 
 const WEATHER_FORECAST_DAY_ID: any = {
   TODAY: 0,
   TOMORROW: 1,
-  DAY_AFTER_TOMORROW: 2
+  DAY_AFTER_TOMORROW: 2,
 }

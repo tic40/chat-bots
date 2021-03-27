@@ -7,20 +7,20 @@ const postToSlack = (
     text,
     channel: channelName,
     icon_emoji: SLACK_BOT_ICON_EMOJI,
-    username: SLACK_BOT_USERNAME
+    username: SLACK_BOT_USERNAME,
   }
   if (imageUrl) {
     payload.attachments = [
       {
-        image_url: imageUrl
-      }
+        image_url: imageUrl,
+      },
     ]
   }
 
   UrlFetchApp.fetch(SLACK_WEBHOOK_URL, {
     contentType: 'application/json',
     method: 'post',
-    payload: JSON.stringify(payload)
+    payload: JSON.stringify(payload),
   })
 }
 
@@ -36,9 +36,7 @@ const getSpreadSheet = (sheetName: string): any => {
 }
 
 const getSpreadSheetValues = (sheetName: string): any[] => {
-  return getSpreadSheet(sheetName)
-    .getDataRange()
-    .getValues()
+  return getSpreadSheet(sheetName).getDataRange().getValues()
 }
 
 const getWeatherForecast = (cityId: number) => {
@@ -46,7 +44,7 @@ const getWeatherForecast = (cityId: number) => {
   const baseUrl: string =
     'http://weather.livedoor.com/forecast/webservice/json/v1'
   const res: any = UrlFetchApp.fetch(`${baseUrl}?city=${cityId}`, {
-    method: 'get'
+    method: 'get',
   })
   if (!res) {
     return {}
@@ -56,7 +54,7 @@ const getWeatherForecast = (cityId: number) => {
 
 const formatWeatherForecastMessage = ({
   dayId,
-  forecastData
+  forecastData,
 }: {
   dayId: number
   forecastData: any
@@ -75,7 +73,7 @@ const formatWeatherForecastMessage = ({
   return [
     `${areaName}: ${telop}`,
     `気温(最低/最高): ${min || unknownText} / ${max || unknownText}`,
-    comment
+    comment,
   ].join('\n')
 }
 
@@ -87,7 +85,7 @@ const weatherForecast = (dayId: number): string => {
   const targetDays: string[] = ['今日', '明日', '明後日']
   return [
     `${targetDays[dayId]}の天気${BOT_PHRASE}`,
-    formatWeatherForecastMessage({ dayId, forecastData: weatherTokyo })
+    formatWeatherForecastMessage({ dayId, forecastData: weatherTokyo }),
   ].join('\n')
 }
 
@@ -123,9 +121,7 @@ const getMoneyRateMessage = (rate: {
   currencyPairCode: string
   open: number
 }): string => {
-  return `Pair: ${rate.currencyPairCode} High: ${rate.high} Low: ${
-    rate.low
-  } ask: ${rate.ask} bid: ${rate.bid}`
+  return `Pair: ${rate.currencyPairCode} High: ${rate.high} Low: ${rate.low} ask: ${rate.ask} bid: ${rate.bid}`
 }
 
 const getStockInfoDow = (): any => {
@@ -138,7 +134,7 @@ const getStockInfoDow = (): any => {
   const price = matchedPrice[2]
 
   const matchedComparison: string[] = contentText.match(
-    new RegExp( `(<dd class="delta(Up|Down) arrow">)(.+)(</dd>)`)
+    new RegExp(`(<dd class="delta(Up|Down) arrow">)(.+)(</dd>)`)
   )
   if (!matchedComparison) {
     return {}
@@ -147,9 +143,36 @@ const getStockInfoDow = (): any => {
   return { name: 'NYダウ', price, comparison }
 }
 
-const getBitCoinRate = (): { ask: number, bid: number, mid: number } => {
+const getBitCoinRate = (): { ask: number; bid: number; mid: number } => {
   const url = 'https://bitflyer.com/api/echo/price'
   return JSON.parse(UrlFetchApp.fetch(url).getContentText())
+}
+
+const getStockInfoNew = (companyCode: string) => {
+  // const url = `https://finance.yahoo.co.jp/quote/${companyCode}`
+  const url = `https://kabutan.jp/stock/chart?code=${companyCode}`
+  const contentText: string = UrlFetchApp.fetch(url).getContentText()
+
+  const matchedName: string[] = contentText.match(
+    new RegExp(`<title>(.+)【.+</title>`)
+  )
+  const matchedPrice: string[] = contentText.match(
+    new RegExp(`<span class="kabuka">(.+)<\/span>`)
+  )
+  const matchedDiffPrice: string[] = contentText.match(
+    new RegExp(`<dd><span class="up">(.+)</span></dd>`)
+  )
+  const matchedDiffPer: string[] = contentText.match(
+    new RegExp(`<dd><span class="up">(.+)</span>%</dd>`)
+  )
+
+  if (!matchedName || !matchedPrice || !matchedDiffPrice || !matchedDiffPer) {
+    return {}
+  }
+  const name: string = matchedName[1]
+  const price: string = matchedPrice[1]
+  const comparison: string = `${matchedDiffPrice[1]}(${matchedDiffPer[1]})%`
+  return { name, price, comparison }
 }
 
 const getStockInfo = (companyCode: number): any => {
@@ -190,9 +213,7 @@ const getStockInfoMessage = (stockInfo: {
   price: string
   comparison: string
 }): string => {
-  return `${stockInfo.name} の現在の株価は ${stockInfo.price} 前日比${
-    stockInfo.comparison
-  } です`
+  return `${stockInfo.name} の現在の株価は ${stockInfo.price} 前日比${stockInfo.comparison} です`
 }
 
 const getBitCoinRateMessage = (rate: {
@@ -200,7 +221,9 @@ const getBitCoinRateMessage = (rate: {
   mid: number
   bid: number
 }): string => {
-  return `ビットコインの現在の買値は ${Math.floor(rate.ask).toLocaleString()} 円です`
+  return `ビットコインの現在の買値は ${Math.floor(
+    rate.ask
+  ).toLocaleString()} 円です`
 }
 
 const getTwitterTrends = (locationId: number): any[] => {
@@ -208,8 +231,8 @@ const getTwitterTrends = (locationId: number): any[] => {
   const res = UrlFetchApp.fetch(url, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`
-    }
+      Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`,
+    },
   })
   return JSON.parse(res.getContentText())[0].trends
 }
@@ -229,17 +252,17 @@ const getChitoseMessage = (): string => {
     'しおりちゃん',
     'ななせちゃん',
     'ひなのちゃん',
-    'みこちゃん'
+    'みこちゃん',
   ]
   const minDay: number = 0
   const maxDay: number = 4
   const messages: string[] = []
   for (const i = minDay; i <= maxDay; i++) {
-    let statuses: any = names.map(name => {
+    let statuses: any = names.map((name) => {
       return {
         name,
         time: '',
-        imgFullPath: ''
+        imgFullPath: '',
       }
     })
 
@@ -262,7 +285,7 @@ const getChitoseMessage = (): string => {
           '```',
           `<${currentUrl}|${scheduleDate}>`,
           'まだスケジュールがないかも？',
-          '```'
+          '```',
         ].join('\n')
       )
       continue
@@ -273,7 +296,7 @@ const getChitoseMessage = (): string => {
         new RegExp(/<li class="name"><a[^>]*>([\s\S]*?)<\/a><\/li>/)
       )[1]
 
-      statuses = statuses.map(st => {
+      statuses = statuses.map((st) => {
         if (st.name === name) {
           const time: string = str.match(
             new RegExp(/<li class="time">([\s\S]*?)<\/li>/)
@@ -291,13 +314,13 @@ const getChitoseMessage = (): string => {
         '```',
         `<${currentUrl}|${scheduleDate}>`,
         statuses
-          .map(st => {
+          .map((st) => {
             return st.time
               ? `<${st.imgFullPath}|${st.name}>: ${st.time}`
               : `${st.name}: 出勤なし`
           })
           .join('\n'),
-        '```'
+        '```',
       ].join('\n')
     )
   }
@@ -315,11 +338,11 @@ const getPairsScreenshotUrl = (): string => {
     contentType: 'application/json',
     method: 'post',
     headers: {
-      Authorization: `Client-ID ${IMGURL_CLIENT_ID}`
+      Authorization: `Client-ID ${IMGURL_CLIENT_ID}`,
     },
     payload: JSON.stringify({
-      image: data
-    })
+      image: data,
+    }),
   })
   if (!res) {
     return
@@ -333,11 +356,9 @@ const getRJKarakuriMessage = (message): string => {
     method: 'post',
     payload: JSON.stringify({
       query: message,
-      session: Math.random()
-        .toString(36)
-        .substring(12),
-      referrer: ''
-    })
+      session: Math.random().toString(36).substring(12),
+      referrer: '',
+    }),
   })
   if (!res) {
     return ''
