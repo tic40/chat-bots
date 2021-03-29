@@ -156,7 +156,7 @@ const getStockInfoNew = (companyCode: string) => {
     new RegExp(`<title>(.+)【.+</title>`)
   )
   const matchedPrice: string[] = contentText.match(
-    new RegExp(`<span class="kabuka">(.+)<\/span>`)
+    new RegExp(`<span class="kabuka">(.+)</span>`)
   )
   const matchedDiffPrice: string[] = contentText.match(
     new RegExp(`<dd><span class="up">(.+)</span></dd>`)
