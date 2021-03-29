@@ -159,10 +159,10 @@ const getStockInfoNew = (companyCode: string) => {
     new RegExp(`<span class="kabuka">(.+)</span>`)
   )
   const matchedDiffPrice: string[] = contentText.match(
-    new RegExp(`<dd><span class="up">(.+)</span></dd>`)
+    new RegExp(`<dd><span class="(up|down)">(.+)</span></dd>`)
   )
   const matchedDiffPer: string[] = contentText.match(
-    new RegExp(`<dd><span class="up">(.+)</span>%</dd>`)
+    new RegExp(`<dd><span class="(up|down)">(.+)</span>%</dd>`)
   )
 
   if (!matchedName || !matchedPrice || !matchedDiffPrice || !matchedDiffPer) {
@@ -170,7 +170,7 @@ const getStockInfoNew = (companyCode: string) => {
   }
   const name: string = matchedName[1]
   const price: string = matchedPrice[1]
-  const comparison: string = `${matchedDiffPrice[1]}(${matchedDiffPer[1]}%)`
+  const comparison: string = `${matchedDiffPrice[2]}(${matchedDiffPer[2]}%)`
   return { name, price, comparison }
 }
 
