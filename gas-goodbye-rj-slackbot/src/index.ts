@@ -65,7 +65,7 @@ const doPost = (e): void => {
         `bot 日経平均株価で現在の日経平均株価を教えるよ`,
         `bot 為替で現在の為替レートを教えるよ`,
         `bot トレンドで現在のトレンドを教えるよ`,
-        `bot サポート〇〇でサポートが答えるよ`,
+        // `bot サポート〇〇でサポートが答えるよ`,
         `botトリガーは 'b' でもいいよ`
       ].join('\n'),
       channelName
@@ -90,7 +90,7 @@ const doPost = (e): void => {
 
   if (new RegExp('^日経平均').test(message)) {
     postToSlack(`株価取得中...`, channelName)
-    const stockInfo: any = getStockInfo(COMPANY_CODE_NIKKEI_AVE)
+    const stockInfo: any = getStockInfoNew('0000')
     if (!stockInfo.name) {
       postToSlack('株価の取得に失敗しました', channelName)
     } else {
@@ -149,6 +149,7 @@ const doPost = (e): void => {
     return
   }
 
+  /*
   if (new RegExp('^(サポート|さぽーと)', 'i').test(message)) {
     const matched: string[] = message.match(
       new RegExp(`(サポート|さぽーと)(.*)`)
@@ -160,6 +161,7 @@ const doPost = (e): void => {
     postToSlack(getRJKarakuriMessage(responseMessage), channelName)
     return
   }
+  */
 
   if (new RegExp(RJ.join('|')).test(message)) {
     postToSlack(randPickMessageSheet(SHEET_NAMES.RJ), channelName)
@@ -171,8 +173,15 @@ const doPost = (e): void => {
 }
 
 function openingCall(): void {
-  postToSlack(randPickMessageSheet(SHEET_NAMES.OPENING_CALL))
-  if (new Date().getDate() === RJ_DAY) {
+  const d = new Date()
+  // 月曜日
+  if (d.getDay() === 1) {
+    postToSlack('月曜日がはじまんでい')
+  } else {
+    postToSlack(randPickMessageSheet(SHEET_NAMES.OPENING_CALL))
+  }
+
+  if (d.getDate() === RJ_DAY) {
     postToSlack(randPickMessageSheet(SHEET_NAMES.RJ_DAY))
   } else {
     postToSlack(`今年も残り \`${daysLeft()}日\` ${BOT_PHRASE}！`)
@@ -200,7 +209,7 @@ function stockReport(): void {
   postToSlack(`今日のレートチェック${BOT_PHRASE}`)
   postToSlack(
     [
-      getStockInfoMessage(getStockInfo(COMPANY_CODE_NIKKEI_AVE)),
+      getStockInfoMessage(getStockInfoNew('0000')),
       getStockInfoMessage(getStockInfoNew(COMPANY_CODE_RJ)),
       getBitCoinRateMessage(getBitCoinRate())
     ].join('\n')

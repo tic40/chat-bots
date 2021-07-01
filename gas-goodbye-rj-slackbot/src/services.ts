@@ -8,6 +8,7 @@ const postToSlack = (
     channel: channelName,
     icon_emoji: SLACK_BOT_ICON_EMOJI,
     username: SLACK_BOT_USERNAME,
+    attachments: null,
   }
   if (imageUrl) {
     payload.attachments = [
@@ -153,7 +154,7 @@ const getStockInfoNew = (companyCode: string) => {
   const contentText: string = UrlFetchApp.fetch(url).getContentText()
 
   const matchedName: string[] = contentText.match(
-    new RegExp(`<title>(.+)【.+</title>`)
+    new RegExp(`<title>(.+)[(【].+</title>`)
   )
   const matchedPrice: string[] = contentText.match(
     new RegExp(`<span class="kabuka">(.+)</span>`)
