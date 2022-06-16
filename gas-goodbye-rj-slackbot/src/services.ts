@@ -129,18 +129,20 @@ const getStockInfoDow = (): any => {
   const url: string = 'https://m.finance.yahoo.co.jp/stock?code=%5Edji'
   const contentText: string = UrlFetchApp.fetch(url).getContentText()
   const matchedPrice: string[] = contentText.match(
-    new RegExp(`(<dd class="priceFin">)(.+)(</dd>)`)
+    new RegExp(`(<span class="_3BGK5SVf">)(.+?)(</span>)`)
   )
   if (!matchedPrice) return {}
   const price = matchedPrice[2]
 
   const matchedComparison: string[] = contentText.match(
-    new RegExp(`(<dd class="delta(Up|Down) arrow">)(.+)(</dd>)`)
+    new RegExp(
+      `(<span class="_3HWBPedk"><span></span><span class="_3BGK5SVf">)(.+?)(</span>)`
+    )
   )
   if (!matchedComparison) {
     return {}
   }
-  const comparison: string = matchedComparison[3]
+  const comparison: string = matchedComparison[2]
   return { name: 'NYダウ', price, comparison }
 }
 

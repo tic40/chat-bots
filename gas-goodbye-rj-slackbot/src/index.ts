@@ -28,7 +28,7 @@ const doPost = (e): void => {
     postToSlack(
       [
         `現在のトレンドだよ`,
-        `${getTwitterTrendsMessage(getTwitterTrends(23424856))}`
+        `${getTwitterTrendsMessage(getTwitterTrends(23424856))}`,
       ].join('\n'),
       channelName
     )
@@ -66,7 +66,7 @@ const doPost = (e): void => {
         `bot 為替で現在の為替レートを教えるよ`,
         `bot トレンドで現在のトレンドを教えるよ`,
         // `bot サポート〇〇でサポートが答えるよ`,
-        `botトリガーは 'b' でもいいよ`
+        `botトリガーは 'b' でもいいよ`,
       ].join('\n'),
       channelName
     )
@@ -116,7 +116,7 @@ const doPost = (e): void => {
     if (!bitCoinRate) {
       postToSlack('レートの取得に失敗しました', channelName)
     } else {
-      postToSlack(getBitCoinRateMessage(bitCoinRate), channelName))
+      postToSlack(getBitCoinRateMessage(bitCoinRate), channelName)
     }
     return
   }
@@ -192,7 +192,7 @@ function trendReport(): void {
   postToSlack(
     [
       `現在のトレンドだよ。もうチェックした？`,
-      `${getTwitterTrendsMessage(getTwitterTrends(23424856))}`
+      `${getTwitterTrendsMessage(getTwitterTrends(23424856))}`,
     ].join('\n')
   )
 }
@@ -211,7 +211,7 @@ function stockReport(): void {
     [
       getStockInfoMessage(getStockInfoNew('0000')),
       getStockInfoMessage(getStockInfoNew(COMPANY_CODE_RJ)),
-      getBitCoinRateMessage(getBitCoinRate())
+      getBitCoinRateMessage(getBitCoinRate()),
     ].join('\n')
   )
   // postToSlack(
