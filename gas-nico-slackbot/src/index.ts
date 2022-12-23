@@ -223,23 +223,6 @@ function trendReport(): void {
   )
 }
 
-function encourageDietTask(): void {
-  const now: Date = new Date()
-  const today: string = `${now.getFullYear()}/${now.getMonth() +
-    1}/${now.getDate()}`
-  const lastData: any = getLastWithingsMeasure()
-  if (lastData.date === today) {
-    return
-  }
-  const messages: any[] = getSpreadSheetValues(SHEET_NAMES.ENCOURAGE_DIET_TASK)
-  postToSlack(
-    [
-      randomFromArray(messages)[0],
-      `最後に計測したのは ${lastData.date} だ${BOT_PHRASE}`
-    ].join('\n')
-  )
-}
-
 function tweet(): void {
   const randInt = Math.floor(Math.random() * Math.floor(5))
   if (randInt === 1) {
