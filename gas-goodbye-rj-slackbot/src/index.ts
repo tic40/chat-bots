@@ -149,20 +149,6 @@ const doPost = (e): void => {
     return
   }
 
-  /*
-  if (new RegExp('^(サポート|さぽーと)', 'i').test(message)) {
-    const matched: string[] = message.match(
-      new RegExp(`(サポート|さぽーと)(.*)`)
-    )
-    if (!matched || !matched[2]) {
-      return
-    }
-    const responseMessage: string = matched[2].trim()
-    postToSlack(getRJKarakuriMessage(responseMessage), channelName)
-    return
-  }
-  */
-
   if (new RegExp(RJ.join('|')).test(message)) {
     postToSlack(randPickMessageSheet(SHEET_NAMES.RJ), channelName)
     return
@@ -211,6 +197,7 @@ function stockReport(): void {
     [
       getStockInfoMessage(getStockInfoNew('0000')),
       getStockInfoMessage(getStockInfoNew(COMPANY_CODE_RJ)),
+      getStockInfoMessage(getStockInfoNew(COMPANY_CODE_NOTE)),
       getBitCoinRateMessage(getBitCoinRate()),
     ].join('\n')
   )

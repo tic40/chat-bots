@@ -18,6 +18,9 @@ const RJ: string[] = properties.getProperty('RJ').split(',')
 const COMPANY_CODE_RJ: number = Number(
   properties.getProperty('COMPANY_CODE_RJ')
 )
+const COMPANY_CODE_NOTE: number = Number(
+  properties.getProperty('COMPANY_CODE_NOTE')
+)
 const RJ_DAY: number = Number(properties.getProperty('RJ_DAY'))
 const TWITTER_BEARER_TOKEN: string = properties.getProperty(
   'TWITTER_BEARER_TOKEN'
