@@ -35,29 +35,10 @@ const doPost = (e): void => {
     return
   }
 
-  if (new RegExp('^ミッション|みっしょん|mission', 'i').test(message)) {
-    postToSlack(randPickMessageSheet(SHEET_NAMES.MISSION), channelName)
-    return
-  }
-
-  if (new RegExp('^ウェイ|うぇい|way', 'i').test(message)) {
-    postToSlack(randPickMessageSheet(SHEET_NAMES.WAY), channelName)
-    return
-  }
-
-  if (new RegExp('^(今日|きょう)も(一|[０-９ 0-9]*)(日|にち)').test(message)) {
-    postToSlack(randPickMessageSheet(SHEET_NAMES.KYOMO_ICHINICHI), channelName)
-    chitose()
-    return
-  }
-
   if (new RegExp(`^ヘルプ|へるぷ|help$`, 'i').test(message)) {
     postToSlack(
       [
         `bot 天気: 天気予報するよ`,
-        `bot ミッション: ミッションを教えるよ`,
-        `bot ウェイ: ウェイ！`,
-        `bot 今日も１日: がんばる${BOT_PHRASE}`,
         `bot 編集: メッセージ編集のURLを教えるよ`,
         `bot github: GitHubのURLを教えるよ`,
         `bot 〇〇で会話するよ`,
@@ -65,7 +46,6 @@ const doPost = (e): void => {
         `bot 日経平均株価で現在の日経平均株価を教えるよ`,
         `bot 為替で現在の為替レートを教えるよ`,
         `bot トレンドで現在のトレンドを教えるよ`,
-        // `bot サポート〇〇でサポートが答えるよ`,
         `botトリガーは 'b' でもいいよ`,
       ].join('\n'),
       channelName
@@ -75,16 +55,6 @@ const doPost = (e): void => {
 
   if (new RegExp(`^GitHub$`, 'i').test(message)) {
     postToSlack(`${GITHUB_URL}`, channelName)
-    return
-  }
-
-  if (new RegExp('^編集|edit$', 'i').test(message)) {
-    postToSlack(
-      `ここから編集${BOT_PHRASE}！\n${getSpreadSheetUrl(
-        SHEET_NAMES.KYOMO_ICHINICHI
-      )}`,
-      channelName
-    )
     return
   }
 
@@ -149,29 +119,18 @@ const doPost = (e): void => {
     return
   }
 
-  if (new RegExp(RJ.join('|')).test(message)) {
-    postToSlack(randPickMessageSheet(SHEET_NAMES.RJ), channelName)
-    return
-  }
-
   postToSlack(getUserLocalMessage(message), channelName)
   return
 }
 
 function openingCall(): void {
   const d = new Date()
-  // 月曜日
   if (d.getDay() === 1) {
     postToSlack('月曜日がはじまんでい')
   } else {
-    postToSlack(randPickMessageSheet(SHEET_NAMES.OPENING_CALL))
+    postToSlack('そろそろ開店ガラガラ〜')
   }
-
-  if (d.getDate() === RJ_DAY) {
-    postToSlack(randPickMessageSheet(SHEET_NAMES.RJ_DAY))
-  } else {
-    postToSlack(`今年も残り \`${daysLeft()}日\` ${BOT_PHRASE}！`)
-  }
+  postToSlack(`今年も残り \`${daysLeft()}日\` ${BOT_PHRASE}！`)
 }
 
 function trendReport(): void {
@@ -184,7 +143,7 @@ function trendReport(): void {
 }
 
 function eveningCall(): void {
-  postToSlack(randPickMessageSheet(SHEET_NAMES.EVENING_CALL))
+  postToSlack('そろそろ閉店ガラガラ〜')
   postToSlack(weatherForecast(WEATHER_FORECAST_DAY_ID.TOMORROW))
 }
 
@@ -201,34 +160,7 @@ function stockReport(): void {
       getBitCoinRateMessage(getBitCoinRate()),
     ].join('\n')
   )
-  // postToSlack(
-  //   [`為替レート`, getMoneyRateMessage(getMoneyRateByPairCode('USDJPY'))].join(
-  //     '\n'
-  //   )
-  // )
 }
-
-function howIsProgress(): void {
-  postToSlack(
-    randPickMessageSheet(SHEET_NAMES.HOW_IS_PROGRESS),
-    PROGRESS_TARGET_CHANNEL
-  )
-}
-
-function chitose(): void {
-  postToSlack(
-    `例の出勤スケジュール${BOT_PHRASE}\n${getChitoseMessage()}`,
-    PROGRESS_TARGET_CHANNEL
-  )
-}
-
-/*
-function pairs(): void {
-  postToSlack('例のスクショぞい', PROGRESS_TARGET_CHANNEL, {
-    imageUrl: getPairsScreenshotUrl()
-  })
-}
-*/
 
 function test(): void {
   Logger.log('execute test')
