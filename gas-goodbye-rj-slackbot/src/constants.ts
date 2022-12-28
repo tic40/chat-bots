@@ -11,7 +11,6 @@ const SLACK_OUTGOING_WEBHOOK_TOKEN: string = properties.getProperty(
   'SLACK_OUTGOING_WEBHOOK_TOKEN'
 )
 const SLACK_WEBHOOK_URL: string = properties.getProperty('SLACK_WEBHOOK_URL')
-const SPREAD_SHEET_ID: string = properties.getProperty('SPREAD_SHEET_ID')
 const USER_LOCAL_API_KEY: string = properties.getProperty('USER_LOCAL_API_KEY')
 const COMPANY_CODE_RJ: number = Number(
   properties.getProperty('COMPANY_CODE_RJ')
