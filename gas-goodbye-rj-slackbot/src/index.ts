@@ -12,17 +12,6 @@ const doPost = (e): void => {
     return
   }
 
-  if (new RegExp('天気').test(message)) {
-    let dayId: number = WEATHER_FORECAST_DAY_ID.TODAY
-    if (message.indexOf('明日') !== -1) {
-      dayId = WEATHER_FORECAST_DAY_ID.TOMORROW
-    } else if (message.indexOf('明後日') !== -1) {
-      dayId = WEATHER_FORECAST_DAY_ID.DAY_AFTER_TOMORROW
-    }
-    postToSlack(weatherForecast(dayId), channelName)
-    return
-  }
-
   if (new RegExp('とれんど|トレンド|trend', 'i').test(message)) {
     // japan: 23424856 tokyo: 1118370
     postToSlack(
@@ -144,7 +133,6 @@ function trendReport(): void {
 
 function eveningCall(): void {
   postToSlack('そろそろ閉店ガラガラ〜')
-  postToSlack(weatherForecast(WEATHER_FORECAST_DAY_ID.TOMORROW))
 }
 
 function stockReport(): void {

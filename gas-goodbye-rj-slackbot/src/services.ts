@@ -25,6 +25,7 @@ const postToSlack = (
   })
 }
 
+/*
 const getSpreadSheetUrl = (sheetName: string): string => {
   const spreadSheet: any = SpreadsheetApp.openById(SPREAD_SHEET_ID)
   const sheet: any = spreadSheet.getSheetByName(sheetName)
@@ -39,56 +40,7 @@ const getSpreadSheet = (sheetName: string): any => {
 const getSpreadSheetValues = (sheetName: string): any[] => {
   return getSpreadSheet(sheetName).getDataRange().getValues()
 }
-
-const getWeatherForecast = (cityId: number) => {
-  // ref: http://weather.livedoor.com/weather_hacks/webservice
-  const baseUrl: string =
-    'http://weather.livedoor.com/forecast/webservice/json/v1'
-  const res: any = UrlFetchApp.fetch(`${baseUrl}?city=${cityId}`, {
-    method: 'get',
-  })
-  if (!res) {
-    return {}
-  }
-  return JSON.parse(res.getContentText())
-}
-
-const formatWeatherForecastMessage = ({
-  dayId,
-  forecastData,
-}: {
-  dayId: number
-  forecastData: any
-}): string => {
-  const telop: string = forecastData.forecasts[dayId].telop
-  const areaName: string = forecastData.location.city
-  const temp = forecastData.forecasts[dayId].temperature
-  const min: number = Number(temp.min && temp.min.celsius)
-  const max: number = Number(temp.max && temp.max.celsius)
-  let comment: string = ''
-  if (/雨/.test(telop)) {
-    comment = `傘が必要かもしれん${BOT_PHRASE}`
-  }
-
-  const unknownText: string = '-'
-  return [
-    `${areaName}: ${telop}`,
-    `気温(最低/最高): ${min || unknownText} / ${max || unknownText}`,
-    comment,
-  ].join('\n')
-}
-
-const weatherForecast = (dayId: number): string => {
-  const weatherTokyo = getWeatherForecast(130010)
-  if (!weatherTokyo) {
-    return
-  }
-  const targetDays: string[] = ['今日', '明日', '明後日']
-  return [
-    `${targetDays[dayId]}の天気${BOT_PHRASE}`,
-    formatWeatherForecastMessage({ dayId, forecastData: weatherTokyo }),
-  ].join('\n')
-}
+*/
 
 const getUserLocalMessage = (text: string): string => {
   const url: string = `https://chatbot-api.userlocal.jp/api/chat?key=${USER_LOCAL_API_KEY}&message=${text}&bot_name=${BOT_NAME}`
@@ -350,26 +302,4 @@ const getPairsScreenshotUrl = (): string => {
     return
   }
   return JSON.parse(res).data.link
-}
-
-const getRJKarakuriMessage = (message): string => {
-  const res: any = UrlFetchApp.fetch('https://rarejob.karakuri.ai/api/chats', {
-    contentType: 'application/json',
-    method: 'post',
-    payload: JSON.stringify({
-      query: message,
-      session: Math.random().toString(36).substring(12),
-      referrer: '',
-    }),
-  })
-  if (!res) {
-    return ''
-  }
-  const parsed = JSON.parse(res)[0]
-  if (parsed.type === 'text') {
-    return parsed.text
-  }
-  return `めんどくさいレスポンス返ってきたからそのまま表示するね\n\n\`\`\`${JSON.stringify(
-    parsed
-  )}\`\`\``
 }
