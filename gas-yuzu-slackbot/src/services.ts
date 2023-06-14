@@ -7,20 +7,20 @@ const postToSlack = (
     text,
     channel: channelName,
     icon_emoji: SLACK_BOT_ICON_EMOJI,
-    username: SLACK_BOT_USERNAME
+    username: SLACK_BOT_USERNAME,
   }
   if (imageUrl) {
     payload.attachments = [
       {
-        image_url: imageUrl
-      }
+        image_url: imageUrl,
+      },
     ]
   }
 
   UrlFetchApp.fetch(SLACK_WEBHOOK_URL, {
     contentType: 'application/json',
     method: 'post',
-    payload: JSON.stringify(payload)
+    payload: JSON.stringify(payload),
   })
 }
 
@@ -35,8 +35,8 @@ const getTwitterTrends = (locationId: number): any[] => {
   const res = UrlFetchApp.fetch(url, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`
-    }
+      Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`,
+    },
   })
   return JSON.parse(res.getContentText())[0].trends
 }
@@ -59,6 +59,6 @@ const getWikipediaUrlAndBody = (q: string): { url: string; body: string } => {
   }
   return {
     url: res[0].url,
-    body: res[0].body
+    body: res[0].body,
   }
 }

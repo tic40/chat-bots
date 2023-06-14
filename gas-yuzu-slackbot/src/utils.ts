@@ -35,9 +35,7 @@ const getSpreadSheet = (sheetName: string): any => {
 }
 
 const getSpreadSheetValues = (sheetName: string): any[] => {
-  return getSpreadSheet(sheetName)
-    .getDataRange()
-    .getValues()
+  return getSpreadSheet(sheetName).getDataRange().getValues()
 }
 
 const getGroupId = (json: any): void => {
@@ -46,4 +44,17 @@ const getGroupId = (json: any): void => {
   const sheet = getSpreadSheet('Sheet1')
   sheet.getRange(1, 1).setValue(GID)
   return
+}
+
+function getFirstDayOfMonth(now: Date) {
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1
+  const formattedMonth = ('00' + month.toString()).slice(-2)
+  const formattedDate = `${year}-${formattedMonth}-01`
+  return formattedDate
+}
+
+function getDayOfWeek(day) {
+  const dayOfWeekStr = ['日','月','火','水','木','金','土']
+  return dayOfWeekStr[day]
 }

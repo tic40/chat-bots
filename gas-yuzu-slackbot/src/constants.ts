@@ -27,17 +27,17 @@ const SHEET_NAMES: any = {
   TWEET: 'tweet',
   WISHLIST: 'wishlist',
   WITHINGS: 'withings',
-  WITHINGS_CHART: 'withingsChart'
+  WITHINGS_CHART: 'withingsChart',
 }
 const WEATHER_FORECAST_DAY_ID: any = {
   TODAY: 0,
   TOMORROW: 1,
-  DAY_AFTER_TOMORROW: 2
+  DAY_AFTER_TOMORROW: 2,
 }
 
 const WITHINGS_COLUMNS: any = {
   USERNAME: 1,
   WEIGHT: 2,
   FAT_PERCENT: 3,
-  DATE: 4
+  DATE: 4,
 }
