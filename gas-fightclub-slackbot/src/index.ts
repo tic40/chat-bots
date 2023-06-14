@@ -48,6 +48,10 @@ function trendReport() {
   )
 }
 
+function triggerScrapeAndSlackNotify() {
+  scrapeAndSlackNotify('通知')
+}
+
 function scrapeAndSlackNotify(channelName = '通知') {
   postToSlack('IT健保宿の空き状況をチェック開始...', channelName)
   const mp = {

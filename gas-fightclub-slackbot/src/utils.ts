@@ -55,6 +55,6 @@ function getFirstDayOfMonth(now: Date) {
 }
 
 function getDayOfWeek(day) {
-  const dayOfWeekStr = ['日','月','火','水','木','金','土']
+  const dayOfWeekStr = ['日', '月', '火', '水', '木', '金', '土']
   return dayOfWeekStr[day]
 }
