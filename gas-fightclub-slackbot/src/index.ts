@@ -54,7 +54,7 @@ function triggerScrapeAndSlackNotify() {
 
 function scrapeAndSlackNotify(channelName = '通知') {
   postToSlack(
-    '[<https://as.its-kenpo.or.jp/apply/empty_calendar?s=NFV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D|IT健保宿空き状況> チェック開始]',
+    '<https://as.its-kenpo.or.jp/apply/empty_calendar?s=NFV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D|IT健保宿空き状況> チェック開始',
     channelName
   )
   const mp = {
