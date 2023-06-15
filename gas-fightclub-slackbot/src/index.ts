@@ -18,7 +18,7 @@ const doPost = (e): void => {
     postToSlack(text)
     return
   }
-  if (new RegExp('IT健保宿|健保宿', 'i').test(message)) {
+  if (new RegExp('宿|IT健保宿|健保宿', 'i').test(message)) {
     scrapeAndSlackNotify(channelName)
     return
   }
@@ -53,53 +53,62 @@ function triggerScrapeAndSlackNotify() {
 }
 
 function scrapeAndSlackNotify(channelName = '通知') {
-  postToSlack('[<https://as.its-kenpo.or.jp/apply/empty_calendar?s=NFV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D|IT健保宿空き状況> チェック開始]', channelName)
+  postToSlack(
+    '[<https://as.its-kenpo.or.jp/apply/empty_calendar?s=NFV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D|IT健保宿空き状況> チェック開始]',
+    channelName
+  )
   const mp = {
-    鎌倉パークホテル:
-      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=d0FUTzlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
-    トスラブ館山ルアーナ:
-      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PT1RTTJjVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
-    ホテルハーヴェスト那須:
-      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=ell6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
     トスラブ箱根ビオーレ:
       'https://as.its-kenpo.or.jp/apply/empty_calendar?s=NFV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
     トスラブ箱根和奏林:
       'https://as.its-kenpo.or.jp/apply/empty_calendar?s=NVV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    トスラブ館山ルアーナ:
+      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PT1RTTJjVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
     ホテルハーヴェスト伊東:
       'https://as.its-kenpo.or.jp/apply/empty_calendar?s=Mll6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    ホテルハーヴェスト那須:
+      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=ell6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    鎌倉パークホテル:
+      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=d0FUTzlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
   }
 
   const regex = /<p>(\d+)<\/p><spanclass="icon">(○|△)<\/span>/g
   const message = []
+  const res = {}
+  Object.keys(mp).map((k) => {
+    res[k] = []
+  })
+
   for (const k in mp) {
     const date = new Date()
     for (let i = 0; i < 3; i++) {
       const joinDate = getFirstDayOfMonth(date)
       const url = mp[k] + `&join_date=${joinDate}`
-      const res = UrlFetchApp.fetch(url)
-      const content = res.getContentText().replace(/\s+/g, '')
+      const content = UrlFetchApp.fetch(url)
+        .getContentText()
+        .replace(/\s+/g, '')
       let match
       while ((match = regex.exec(content))) {
         if (match) {
           date.setDate(match[1])
           const day = getDayOfWeek(date.getDay())
-          message.push(`${k}: ${date.getMonth() + 1}/${match[1]}(${day}) 空き`)
+          res[k].push(`${date.getMonth() + 1}/${match[1]}(${day})`)
         }
       }
       date.setMonth(date.getMonth() + 1)
     }
   }
+
+  const messages = []
+  for (const k in res) {
+    const arr = Array.from(new Set(res[k]))
+    if (arr.length === 0) continue
+    message.push(`${k}: ${arr.join(', ')}`)
+  }
   if (message.length === 0) {
-    postToSlack('```直近3ヶ月で空きはなかったよ```', channelName)
+    postToSlack('```現在空きはないよ```', channelName)
   } else {
-    postToSlack(
-      [
-        '```',
-        ...message,
-        '```'
-      ].join('\n'),
-      channelName
-    )
+    postToSlack(['```', ...message, '```'].join('\n'), channelName)
   }
 }
 
