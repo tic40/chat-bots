@@ -73,7 +73,6 @@ function scrapeAndSlackNotify(channelName = '通知') {
   }
 
   const regex = /<p>(\d+)<\/p><spanclass="icon">(○|△)<\/span>/g
-  const message = []
   const res = {}
   Object.keys(mp).map((k) => {
     res[k] = []
@@ -103,12 +102,12 @@ function scrapeAndSlackNotify(channelName = '通知') {
   for (const k in res) {
     const arr = Array.from(new Set(res[k]))
     if (arr.length === 0) continue
-    message.push(`${k}: ${arr.join(', ')}`)
+    messages.push(`${k}: ${arr.join(', ')}`)
   }
-  if (message.length === 0) {
+  if (messages.length === 0) {
     postToSlack('```現在空きはないよ```', channelName)
   } else {
-    postToSlack(['```', ...message, '```'].join('\n'), channelName)
+    postToSlack(['```', ...messages, '```'].join('\n'), channelName)
   }
 }
 
