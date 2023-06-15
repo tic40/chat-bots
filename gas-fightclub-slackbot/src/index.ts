@@ -53,7 +53,7 @@ function triggerScrapeAndSlackNotify() {
 }
 
 function scrapeAndSlackNotify(channelName = '通知') {
-  postToSlack('[IT健保宿空き状況チェック開始]', channelName)
+  postToSlack('[<https://as.its-kenpo.or.jp/apply/empty_calendar?s=NFV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D|IT健保宿空き状況> チェック開始]', channelName)
   const mp = {
     鎌倉パークホテル:
       'https://as.its-kenpo.or.jp/apply/empty_calendar?s=d0FUTzlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
@@ -90,14 +90,13 @@ function scrapeAndSlackNotify(channelName = '通知') {
     }
   }
   if (message.length === 0) {
-    postToSlack('直近3ヶ月で空きはなかったよ', channelName)
+    postToSlack('```直近3ヶ月で空きはなかったよ```', channelName)
   } else {
     postToSlack(
       [
         '```',
         ...message,
-        '```',
-        '<https://as.its-kenpo.or.jp/apply/empty_calendar?s=d0FUTzlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D|予約ページ>',
+        '```'
       ].join('\n'),
       channelName
     )
