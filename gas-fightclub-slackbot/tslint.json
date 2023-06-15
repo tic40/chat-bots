@@ -10,6 +10,8 @@
   "jsRules": { },
   "rules": {
     "object-literal-sort-keys": false,
+    "no-conditional-assignment": false,
+    "forin": false,
     "prettier": [
       true, {
         "singleQuote": true,
