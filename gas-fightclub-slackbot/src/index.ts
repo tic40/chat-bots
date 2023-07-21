@@ -22,6 +22,10 @@ const doPost = (e): void => {
     scrapeAndSlackNotify(channelName)
     return
   }
+  if (new RegExp('赤チャンネル|あかちゃんねる|赤ちゃんねる|わくわくあかちゃんねる|わくわく赤ちゃんねる', 'i').test(message)) {
+    wakubaby(channelName)
+    return
+  }
 
   if (new RegExp('とれんど|トレンド|trend', 'i').test(message)) {
     // japan: 23424856 tokyo: 1118370
@@ -109,6 +113,14 @@ function scrapeAndSlackNotify(channelName = '通知') {
   } else {
     postToSlack(['```', ...messages, '```'].join('\n'), channelName)
   }
+}
+
+function wakubaby(channelName = '通知') {
+  postToSlack(
+    '<http://www.tani.com/wakuwaku.html|只今のわくわく赤チャンネル>',
+    channelName,
+    'http://61.196.233.105:5001/-wvhttp-01-/image.cgi?v=jpg:320x240'
+  )
 }
 
 function test(): void {

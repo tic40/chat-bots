@@ -1,7 +1,7 @@
 const postToSlack = (
   text: string,
   channelName: string = SLACK_CHANNEL,
-  { imageUrl } = {}
+  imageUrl = null
 ): void => {
   const payload = {
     text,
