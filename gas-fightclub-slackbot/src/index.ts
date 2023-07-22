@@ -22,7 +22,12 @@ const doPost = (e): void => {
     scrapeAndSlackNotify(channelName)
     return
   }
-  if (new RegExp('赤チャンネル|あかちゃんねる|赤ちゃんねる|わくわくあかちゃんねる|わくわく赤ちゃんねる', 'i').test(message)) {
+  if (
+    new RegExp(
+      '赤チャンネル|あかちゃんねる|赤ちゃんねる|わくわくあかちゃんねる|わくわく赤ちゃんねる',
+      'i'
+    ).test(message)
+  ) {
     wakubaby(channelName)
     return
   }
@@ -50,10 +55,6 @@ function trendReport() {
       `${getTwitterTrendsMessage(getTwitterTrends(23424856))}`,
     ].join('\n')
   )
-}
-
-function triggerScrapeAndSlackNotify() {
-  scrapeAndSlackNotify('通知')
 }
 
 function scrapeAndSlackNotify(channelName = '通知') {
@@ -119,8 +120,61 @@ function wakubaby(channelName = '通知') {
   postToSlack(
     '<http://www.tani.com/wakuwaku.html|只今のわくわく赤チャンネル>',
     channelName,
-    'http://61.196.233.105:5001/-wvhttp-01-/image.cgi?v=jpg:320x240'
+    `http://61.196.233.105:5001/-wvhttp-01-/image.cgi?v=jpg:320x240&&r=${Math.random()}`
   )
+}
+
+function recordRate() {
+  // if (isWeekend()) return
+  const d = new Date()
+  const hour = d.getHours()
+  // 月曜朝除く
+  if (d.getDay() === 1 && 0 <= hour && hour <= 7) return
+
+  const now = getRate()
+  const sheet = getSpreadSheet('USD/JPY')
+  // 末尾に append
+  sheet.appendRow([new Date(), now])
+  // 行数
+  const length = sheet.getDataRange().getValues().length
+  // 30 行越えたら古いものから削除
+  if (length > 30) sheet.deleteRows(1, length - 30)
+}
+
+function rateCheck() {
+  // if (isWeekend()) return
+  const hour = new Date().getHours()
+  // 深夜-早朝除く
+  if (1 <= hour && hour <= 7) return
+
+  const now = getRate()
+  if (now === '') {
+    postToSlackDmChannel('レート取得に失敗しました')
+    return
+  }
+
+  const sheet = getSpreadSheet('USD/JPY')
+  const values = sheet
+    .getDataRange()
+    .getValues()
+    .map((v) => Number(v[1]))
+  let message = `${now}`
+  if (values.length >= 30) {
+    const mn = Math.min(...values)
+    const mx = Math.max(...values)
+    const diff = mx - mn
+    message += `: 直近30minのdiffが ${diff} です.`
+    if (diff < 0.6) message += `レンジの可能性あり`
+  }
+
+  postToSlackDmChannel(message)
+}
+
+function triggerScrapeAndSlackNotify() {
+  scrapeAndSlackNotify('通知')
+}
+function triggerWakubaby() {
+  wakubaby('通知')
 }
 
 function test(): void {

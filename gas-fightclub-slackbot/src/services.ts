@@ -24,6 +24,34 @@ const postToSlack = (
   })
 }
 
+const postToSlackDmChannel = (message: string) => {
+  UrlFetchApp.fetch('https://slack.com/api/chat.postMessage', {
+    method: 'post',
+    headers: { contentType: 'application/json' },
+    payload: {
+      token: DM_FROM_CHATBOT_APP_TOKEN,
+      channel: DM_FROM_CHATBOT_APP_DM_CHANNEL_ID,
+      text: message,
+    },
+  })
+}
+
+const getRate = () => {
+  const url = 'https://finance.yahoo.co.jp/quote/USDJPY=FX'
+  const contentText: string = UrlFetchApp.fetch(url).getContentText()
+
+  const matched = contentText.match(
+    new RegExp(
+      /{"countryCode":"USDJPY","name":"米ドル\/円","bid":{"value":"[\d|\.]+"},"ask":{"value":"([\d|\.]+)"}/
+    )
+  )
+  return !matched ? '' : matched[1]
+  if (!matched) {
+    return ''
+  }
+  return matched[1]
+}
+
 const getUserLocalMessage = (text: string): string => {
   const url: string = `https://chatbot-api.userlocal.jp/api/chat?key=${USER_LOCAL_API_KEY}&message=${text}&bot_name=${SLACK_BOT_USERNAME}`
   const res = UrlFetchApp.fetch(url)

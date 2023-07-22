@@ -25,23 +25,6 @@ const postToSlack = (
   })
 }
 
-/*
-const getSpreadSheetUrl = (sheetName: string): string => {
-  const spreadSheet: any = SpreadsheetApp.openById(SPREAD_SHEET_ID)
-  const sheet: any = spreadSheet.getSheetByName(sheetName)
-  return `${spreadSheet.getUrl()}#gid=${sheet.getSheetId()}`
-}
-
-const getSpreadSheet = (sheetName: string): any => {
-  const spreadSheet: any = SpreadsheetApp.openById(SPREAD_SHEET_ID)
-  return spreadSheet.getSheetByName(sheetName)
-}
-
-const getSpreadSheetValues = (sheetName: string): any[] => {
-  return getSpreadSheet(sheetName).getDataRange().getValues()
-}
-*/
-
 const getUserLocalMessage = (text: string): string => {
   const url: string = `https://chatbot-api.userlocal.jp/api/chat?key=${USER_LOCAL_API_KEY}&message=${text}&bot_name=${BOT_NAME}`
   const res = UrlFetchApp.fetch(url)
