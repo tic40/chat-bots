@@ -125,7 +125,8 @@ function wakubaby(channelName = '通知') {
 }
 
 function recordRate() {
-  // if (isWeekend()) return
+  // 週末は停止
+  if (isWeekend()) return
   const d = new Date()
   const hour = d.getHours()
   // 月曜朝除く
@@ -141,8 +142,9 @@ function recordRate() {
   if (length > 30) sheet.deleteRows(1, length - 30)
 }
 
-function rateCheck() {
-  // if (isWeekend()) return
+function notifyRate() {
+  // 週末は停止
+  if (isWeekend()) return
   const hour = new Date().getHours()
   // 深夜-早朝除く
   if (1 <= hour && hour <= 7) return
@@ -164,7 +166,7 @@ function rateCheck() {
     const mx = Math.max(...values)
     const diff = mx - mn
     message += `: 直近30minのdiffが ${diff} です.`
-    if (diff < 0.6) message += `レンジの可能性あり`
+    if (diff < 0.06) message += `レンジの可能性あり`
   }
 
   postToSlackDmChannel(message)
