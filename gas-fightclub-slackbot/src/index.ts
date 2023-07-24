@@ -138,8 +138,8 @@ function recordRate() {
   sheet.appendRow([new Date(), now])
   // 行数
   const length = sheet.getDataRange().getValues().length
-  // 30 行越えたら古いものから削除
-  if (length > 30) sheet.deleteRows(1, length - 30)
+  // 60 超えたら古いものから削除
+  if (length > 60) sheet.deleteRows(1, length - 60)
 }
 
 function notifyRate() {
@@ -160,13 +160,17 @@ function notifyRate() {
     .getDataRange()
     .getValues()
     .map((v) => Number(v[1]))
-  let message = `${now}`
+  let message = now
+  const f = (arr) => {
+    const mn = Math.min(...arr)
+    const mx = Math.max(...arr)
+    return (mx - mn) * 100
+  }
   if (values.length >= 30) {
-    const mn = Math.min(...values)
-    const mx = Math.max(...values)
-    const diff = mx - mn
-    message += `: 直近30minのdiffが ${diff} です.`
-    if (diff < 0.06) message += `レンジの可能性あり`
+    const diff30 = f(values.slice(0,30))
+    const diff60 = f(values)
+    message += (`/ 30min diff: ${diff30.toFixed(1)} / 60min diff: ${diff60.toFixed(1)}`)
+    if (diff30 <= 6.0 || diff60 <= 10.0) message += (` / レンジの可能性あり`)
   }
 
   postToSlackDmChannel(message)
