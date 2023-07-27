@@ -160,7 +160,7 @@ function notifyRate() {
     .getDataRange()
     .getValues()
     .map((v) => Number(v[1]))
-  let message = now
+  let messages = [`[now] ${now}`]
   const f = (arr) => {
     const mn = Math.min(...arr)
     const mx = Math.max(...arr)
@@ -169,11 +169,11 @@ function notifyRate() {
   if (values.length >= 30) {
     const diff30 = f(values.slice(0,30))
     const diff60 = f(values)
-    message += (`/ 30min diff: ${diff30.toFixed(1)} / 60min diff: ${diff60.toFixed(1)}`)
-    if (diff30 <= 6.0 || diff60 <= 10.0) message += (` / レンジの可能性あり`)
+    messages.push(`[diff/30-60] ${diff30.toFixed(1)} ${diff60.toFixed(1)}`)
+    messages.push(`[min-max/60] ${Math.min(...values)} - ${Math.max(...values)}`)
+    if (diff30 <= 6.0 || diff60 <= 10.0) messages.push(` / レンジの可能性あり`)
   }
-
-  postToSlackDmChannel(message)
+  postToSlackDmChannel(messages.join('\n'))
 }
 
 function triggerScrapeAndSlackNotify() {
