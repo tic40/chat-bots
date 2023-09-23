@@ -42,14 +42,10 @@ const getRate = () => {
 
   const matched = contentText.match(
     new RegExp(
-      /{"countryCode":"USDJPY","name":"米ドル\/円","bid":{"value":"[\d|\.]+"},"ask":{"value":"([\d|\.]+)"}/
+      /{\\"countryCode\\":\\"USDJPY\\",\\"name\\":\\"米ドル\/円\\",\\"bid\\":{\\"value\\":\\"[\d|\.]+\\"},\\"ask\\":{\\"value\\":\\"([\d|\.]+)\\"}/
     )
   )
   return !matched ? '' : matched[1]
-  if (!matched) {
-    return ''
-  }
-  return matched[1]
 }
 
 const getUserLocalMessage = (text: string): string => {
