@@ -75,6 +75,8 @@ function scrapeAndSlackNotify(channelName = '通知') {
       'https://as.its-kenpo.or.jp/apply/empty_calendar?s=ell6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
     鎌倉パークホテル:
       'https://as.its-kenpo.or.jp/apply/empty_calendar?s=d0FUTzlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    ホテルハーヴェスト旧軽井沢: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PT1RT3hnVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    リソルの森: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=M2dUTngwRFpwWlNaMUpIZDlrSGR3MVda',
   }
 
   const regex = /<p>(\d+)<\/p><spanclass="icon">(○|△)<\/span>/g
