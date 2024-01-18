@@ -57,11 +57,14 @@ function trendReport() {
   )
 }
 
-function scrapeAndSlackNotify(channelName = '通知') {
-  postToSlack(
-    '<https://as.its-kenpo.or.jp/apply/empty_calendar?s=NFV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D|IT健保宿空き状況> チェック開始',
-    channelName
-  )
+function scrapeAndSlackNotify(channelName = '通知', replyOnlyAvailable = false) {
+  if (!replyOnlyAvailable) {
+    postToSlack(
+      '<https://as.its-kenpo.or.jp/apply/empty_calendar?s=NFV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D|IT健保宿空き状況> チェック開始...',
+      channelName
+    )
+  }
+
   const mp = {
     トスラブ箱根ビオーレ:
       'https://as.its-kenpo.or.jp/apply/empty_calendar?s=NFV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
@@ -114,7 +117,9 @@ function scrapeAndSlackNotify(channelName = '通知') {
     messages.push(`${k}: ${arr.join(', ')}`)
   }
   if (messages.length === 0) {
-    postToSlack('```現在空きはないよ```', channelName)
+    if (!replyOnlyAvailable) {
+      postToSlack('```現在空きはないよ```', channelName)
+    }
   } else {
     postToSlack(['```', ...messages, '```'].join('\n'), channelName)
   }
@@ -183,14 +188,14 @@ function notifyRate() {
 }
 
 function triggerKenpoChecker() {
-  now = new Date()
+  const now = new Date()
   if (now.getMinutes() === 0) {
-    scrapeAndSlackNotify('通知')
+    scrapeAndSlackNotify('通知', true)
   }
 }
 function triggerWakubabyChecker() {
-  now = new Date()
-  if ([7,12,18].includes(now.getHours() && now.getMinutes() === 0) {
+  const now = new Date()
+  if ([7,12,18].includes(now.getHours()) && now.getMinutes() === 0) {
     wakubaby('通知')
   }
 }
