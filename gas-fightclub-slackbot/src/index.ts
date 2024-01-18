@@ -77,6 +77,8 @@ function scrapeAndSlackNotify(channelName = '通知') {
       'https://as.its-kenpo.or.jp/apply/empty_calendar?s=d0FUTzlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
     ホテルハーヴェスト旧軽井沢: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PT1RT3hnVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
     リソルの森: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=M2dUTngwRFpwWlNaMUpIZDlrSGR3MVda',
+    ラビスタ富士河口湖: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=MmdUTngwRFpwWlNaMUpIZDlrSGR3MVda',
+    蓼科東急ホテル: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=MUVqTXgwRFpwWlNaMUpIZDlrSGR3MVda'
   }
 
   const regex = /<p>(\d+)<\/p><spanclass="icon">(○|△)<\/span>/g
@@ -180,11 +182,17 @@ function notifyRate() {
   postToSlackDmChannel(messages.join('\n'))
 }
 
-function triggerScrapeAndSlackNotify() {
-  scrapeAndSlackNotify('通知')
+function triggerKenpoChecker() {
+  now = new Date()
+  if (now.getMinutes() === 0) {
+    scrapeAndSlackNotify('通知')
+  }
 }
-function triggerWakubaby() {
-  wakubaby('通知')
+function triggerWakubabyChecker() {
+  now = new Date()
+  if ([7,12,18].includes(now.getHours() && now.getMinutes() === 0) {
+    wakubaby('通知')
+  }
 }
 
 function test(): void {
