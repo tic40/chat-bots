@@ -81,7 +81,9 @@ function scrapeAndSlackNotify(channelName = '通知', replyOnlyAvailable = false
     ホテルハーヴェスト旧軽井沢: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PT1RT3hnVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
     リソルの森: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=M2dUTngwRFpwWlNaMUpIZDlrSGR3MVda',
     ラビスタ富士河口湖: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=MmdUTngwRFpwWlNaMUpIZDlrSGR3MVda',
-    蓼科東急ホテル: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=MUVqTXgwRFpwWlNaMUpIZDlrSGR3MVda'
+    蓼科東急ホテル: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=MUVqTXgwRFpwWlNaMUpIZDlrSGR3MVda',
+    伊豆今井浜東急ホテル: 'https://as.its-kenpo.or.jp/apply/empty_new?s=NEVETXgwRFpwWlNaMUpIZDlrSGR3MVda',
+
   }
 
   const regex = /<p>(\d+)<\/p><spanclass="icon">(○|△)<\/span>/g
