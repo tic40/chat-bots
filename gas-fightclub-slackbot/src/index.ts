@@ -191,7 +191,7 @@ function notifyRate() {
 
 function triggerKenpoChecker() {
   const now = new Date()
-  if (now.getMinutes() === 0) {
+  if (now.getMinutes() % 15 === 0) {
     scrapeAndSlackNotify('通知', true)
   }
 }
