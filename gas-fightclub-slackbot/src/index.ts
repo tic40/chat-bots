@@ -129,8 +129,8 @@ function scrapeAndSlackNotify(channelName = '通知', replyOnlyAvailable = false
 
 function sushiScrapeAndSlackNotify(channelName = '通知') {
   const mp = {
-    鮨ディナー17時テーブル席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PWN6TXdJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
-    鮨ディナー17時カウンター席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PWt6TXdJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    鮨ディナーテーブル席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PWN6TXdJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    鮨ディナーカウンター席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PWt6TXdJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
     鮨ランチテーブル席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PUlETndJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
     鮨ランチカウンター席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PUVETndJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D'
   }
