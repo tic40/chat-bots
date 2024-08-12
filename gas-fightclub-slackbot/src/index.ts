@@ -127,6 +127,51 @@ function scrapeAndSlackNotify(channelName = '通知', replyOnlyAvailable = false
   }
 }
 
+function sushiScrapeAndSlackNotify(channelName = '通知') {
+  const mp = {
+    ディナー17時テーブル: 'https://as.its-kenpo.or.jp/apply/calendar?s=PWN6TXdJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    ディナー17時カウンター: 'https://as.its-kenpo.or.jp/apply/calendar?s=PWt6TXdJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    ランチテーブル: 'https://as.its-kenpo.or.jp/apply/calendar?s=PUlETndJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    ランチカウンター: 'https://as.its-kenpo.or.jp/apply/calendar?s=PUVETndJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D'
+  }
+
+  const regex = /data-join-time="([0-9]{4}-[0-9]{2}-[0-9]{2})" data-use-time="([0-9]{2}:[0-9]{2})">(○|△)<\/td>/g
+  const res = {}
+  Object.keys(mp).map((k) => {
+    res[k] = []
+  })
+
+  for (const k in mp) {
+    const date = new Date()
+    for (let i = 0; i < 15; i++) {
+      date.setDate(date.getDate() + 7);
+      // yyyy-mm-dd
+      const joinDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+      const url = mp[k] + `&join_date=${joinDate}`
+      const content = UrlFetchApp.fetch(url)
+        .getContentText()
+        // .replace(/\s+/g, '')
+      let match
+      while ((match = regex.exec(content))) {
+        if (match) {
+          const day = getDayOfWeek(date.getDay())
+          res[k].push(`${match[1].slice(5).replace('-','/')}(${day})${match[2]}`)
+        }
+      }
+    }
+  }
+
+  const messages = []
+  for (const k in res) {
+    const arr = Array.from(new Set(res[k]))
+    if (arr.length === 0) continue
+    messages.push(`${k}: ${arr.join(', ')}`)
+  }
+  if (messages.length) {
+    postToSlack(['```', ...messages, '```'].join('\n'), channelName)
+  }
+}
+
 function wakubaby(channelName = '通知') {
   postToSlack(
     '<http://www.tani.com/wakuwaku.html|只今のわくわく赤チャンネル>',
@@ -191,7 +236,7 @@ function notifyRate() {
 
 function triggerKenpoChecker() {
   const now = new Date()
-  if (now.getMinutes() % 15 === 0) {
+  if (now.getMinutes() % 10 === 0) {
     scrapeAndSlackNotify('通知', true)
   }
 }
