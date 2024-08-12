@@ -240,6 +240,12 @@ function triggerKenpoChecker() {
     scrapeAndSlackNotify('通知', true)
   }
 }
+function triggerSushiChecker() {
+  const now = new Date()
+  if (now.getMinutes() % 15 === 0) {
+    sushiScrapeAndSlackNotify('通知')
+  }
+}
 function triggerWakubabyChecker() {
   const now = new Date()
   if ([7,12,18].includes(now.getHours()) && now.getMinutes() === 0) {
