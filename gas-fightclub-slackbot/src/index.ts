@@ -152,7 +152,7 @@ function sushiScrapeAndSlackNotify(channelName = '通知') {
       let match
       while ((match = regex.exec(content))) {
         if (match) {
-          const day = getDayOfWeek((new Date(match[i])).getDay())
+          const day = getDayOfWeek((new Date(match[1])).getDay())
           res[k].push(`${match[1].slice(5).replace('-','/')}(${day})${match[2]}`)
         }
       }
