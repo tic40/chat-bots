@@ -129,10 +129,10 @@ function scrapeAndSlackNotify(channelName = '通知', replyOnlyAvailable = false
 
 function sushiScrapeAndSlackNotify(channelName = '通知') {
   const mp = {
-    鮨ディナーテーブル席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PWN6TXdJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
-    鮨ディナーカウンター席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PWt6TXdJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
-    鮨ランチテーブル席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PUlETndJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
-    鮨ランチカウンター席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PUVETndJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D'
+    鮨一新ディナーテーブル席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PWN6TXdJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    鮨一新ディナーカウンター席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PWt6TXdJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    鮨一新ランチテーブル席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PUlETndJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    鮨一新ランチカウンター席: 'https://as.its-kenpo.or.jp/apply/calendar?s=PUVETndJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D'
   }
 
   const regex = /data-join-time="([0-9]{4}-[0-9]{2}-[0-9]{2})" data-use-time="([0-9]{2}:[0-9]{2})">(○|△)<\/td>/g
@@ -148,13 +148,11 @@ function sushiScrapeAndSlackNotify(channelName = '通知') {
       // yyyy-mm-dd
       const joinDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
       const url = mp[k] + `&join_date=${joinDate}`
-      const content = UrlFetchApp.fetch(url)
-        .getContentText()
-        // .replace(/\s+/g, '')
+      const content = UrlFetchApp.fetch(url).getContentText()
       let match
       while ((match = regex.exec(content))) {
         if (match) {
-          const day = getDayOfWeek(date.getDay())
+          const day = getDayOfWeek((new Date(match[i])).getDay())
           res[k].push(`${match[1].slice(5).replace('-','/')}(${day})${match[2]}`)
         }
       }
