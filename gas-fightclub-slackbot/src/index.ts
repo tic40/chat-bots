@@ -66,24 +66,20 @@ function scrapeAndSlackNotify(channelName = '通知', replyOnlyAvailable = false
   }
 
   const mp = {
-    トスラブ箱根ビオーレ:
-      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=NFV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
-    トスラブ箱根和奏林:
-      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=NVV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
-    トスラブ館山ルアーナ:
-      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PT1RTTJjVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
-    ホテルハーヴェスト伊東:
-      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=Mll6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
-    ホテルハーヴェスト那須:
-      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=ell6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
-    鎌倉パークホテル:
-      'https://as.its-kenpo.or.jp/apply/empty_calendar?s=d0FUTzlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    // ホテルハーヴェスト伊東: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=Mll6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    // ホテルハーヴェスト那須: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=ell6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    トスラブ箱根ビオーレ: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=NFV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    トスラブ箱根和奏林: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=NVV6TjlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    トスラブ館山ルアーナ: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PT1RTTJjVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    鎌倉パークホテル: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=d0FUTzlRV2Fta0hid0JYWTlJWFpzeDJieVJuYnZOMlh2ZG1KM1ZtYmZsSGR3MVdaOTQyYnBSM1loOTFiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
     ホテルハーヴェスト旧軽井沢: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PT1RT3hnVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
     リソルの森: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=M2dUTngwRFpwWlNaMUpIZDlrSGR3MVda',
     ラビスタ富士河口湖: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=MmdUTngwRFpwWlNaMUpIZDlrSGR3MVda',
-    蓼科東急ホテル: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=MUVqTXgwRFpwWlNaMUpIZDlrSGR3MVda',
-    伊豆今井浜東急ホテル: 'https://as.its-kenpo.or.jp/apply/empty_new?s=NEVETXgwRFpwWlNaMUpIZDlrSGR3MVda',
-
+    蓼科東急ホテル: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=MUVqTXgwRFpwWlNaMUpIZDlrSGR3MVdaｖ',
+    ラビスタ観音崎テラス: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PUlETnpJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    ホテルオークラ東京ベイ: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PUFETnpJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    熱海後楽園ホテル: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PUVETnpJVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
+    伊香保温泉ホテル天坊: 'https://as.its-kenpo.or.jp/apply/empty_calendar?s=PWNETXhFVFBrbG1KbFZuYzAxVFp5Vkhkd0YyWWZWR2JuOTJiblpTWjFKSGQ5a0hkdzFXWg%3D%3D',
   }
 
   const regex = /<p>(\d+)<\/p><spanclass="icon">(○|△)<\/span>/g
