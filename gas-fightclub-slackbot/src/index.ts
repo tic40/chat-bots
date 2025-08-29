@@ -164,7 +164,7 @@ function sushiScrapeAndSlackNotify(channelName = '通知') {
     messages.push(`${k}: ${arr.join(', ')}`)
   }
   if (messages.length) {
-    postToSlack(['```', ...messages, '```'].join('\n'), channelName)
+    postToSlack(['<@URU9GHSAE>', '```', ...messages, '```'].join('\n'), channelName)
   }
 }
 
