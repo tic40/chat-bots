@@ -121,7 +121,7 @@ function scrapeAndSlackNotify(channelName = '通知', replyOnlyAvailable = false
       postToSlack('```現在空きはないよ```', channelName)
     }
   } else {
-    postToSlack(['```', ...messages, '```'].join('\n'), channelName)
+    postToSlack(['<@URU9GHSAE>', '```', ...messages, '```'].join('\n'), channelName)
   }
 }
 
@@ -164,7 +164,7 @@ function sushiScrapeAndSlackNotify(channelName = '通知') {
     messages.push(`${k}: ${arr.join(', ')}`)
   }
   if (messages.length) {
-    postToSlack(['<@URU9GHSAE>', '```', ...messages, '```'].join('\n'), channelName)
+    postToSlack(['```', ...messages, '```'].join('\n'), channelName)
   }
 }
 
